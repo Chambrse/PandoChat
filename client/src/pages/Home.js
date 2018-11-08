@@ -18,15 +18,19 @@ class Home extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
+        // this.componentWillUpdate = this.componentWillUpdate.bind(this);
         this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
         this.logOut = this.logOut.bind(this);
     };
 
     componentDidMount() {
-        this.socket = io(window.location.host);
-        document.addEventListener("keydown", this.handleKeydown, false);
-        this.socket.on("chat-message", this.addMessage);
+        if (this.props.loggedIn) {
+            console.log('socket initialize');
+            this.socket = io(window.location.host);
+            document.addEventListener("keydown", this.handleKeydown, false);
+            this.socket.on("chat-message", this.addMessage);
+        }
     }
 
     handleKeydown(event) {
@@ -42,10 +46,10 @@ class Home extends Component {
         this.setState({ messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }] });
 
         if (this.state.messagesInCarts.length > 0) {
-            let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length-1];
+            let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
             if (lastCart.length === 5) {
                 console.log('new cart')
-                this.setState({ messagesInCarts: [...this.state.messagesInCarts, [{ id: message.id, username: message.username, msg: message.msg }]]})
+                this.setState({ messagesInCarts: [...this.state.messagesInCarts, [{ id: message.id, username: message.username, msg: message.msg }]] })
             } else {
                 console.log('add message to last cart')
                 lastCart.push({ id: message.id, username: message.username, msg: message.msg })
@@ -58,7 +62,7 @@ class Home extends Component {
             console.log(lastCart);
         } else {
             console.log('start of structure');
-            this.setState({ messagesInCarts: [[{ id: message.id, username: message.username, msg: message.msg }]]})
+            this.setState({ messagesInCarts: [[{ id: message.id, username: message.username, msg: message.msg }]] })
         }
 
     }
@@ -91,15 +95,15 @@ class Home extends Component {
                     <input type='text' className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                 </div>
                 <div className='row p-2 d-flex flex-nowrap' id='chatSled'>
-                    {/* {this.state.messages.length > 0 ?
-                        messagesInCarts.map(n => (
-                            <div className='chatCart col-3'>
-                                {n.map(m => (
+                    {this.state.messagesInCarts.length > 0 ? (
+                        this.state.messagesInCarts.map(n => (
+                            <div className='col-3 chatCart'>
+                                {n.map((m, index) => (
                                     <Message key={m.id} id={m.id} username={m.username} msg={m.msg} />
                                 ))}
                             </div>
                         ))
-                        : null} */}
+                    ) : null}
                 </div>
             </div>
         )

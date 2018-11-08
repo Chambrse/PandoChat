@@ -33,9 +33,7 @@ class Login extends Component {
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
-                this.setState({ redirectTo: '/home' });
             }
-
 
         }).catch(err => {
             console.log(err);
@@ -45,7 +43,6 @@ class Login extends Component {
     }
 
     render() {
-        if (this.state.redirectTo) { return <Redirect to={this.state.redirectTo} /> }
         if (this.props.loggedIn) { return <Redirect to='/home' /> }
         return (
             <div className='container'>
