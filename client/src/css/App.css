@@ -1,0 +1,16 @@
+body {
+  background-image: url(../images/connectwork.png);
+  overflow: hidden;
+}
+.opaque {
+  background-color: white;
+  border-radius: 5px;
+}
+
+#whiteWindow {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  margin: 25px;
+  animation: 0.8s fadeInRight ease;
+}

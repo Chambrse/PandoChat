@@ -1,0 +1,11 @@
+#loginWindow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#registerform {
+    width: 100%;
+    margin: 15px;
+}
