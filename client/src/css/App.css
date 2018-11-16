@@ -12,5 +12,56 @@ body {
   background-color: white;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
   margin: 25px;
-  animation: 0.8s fadeInRight ease;
+}
+
+.page-appear {
+  opacity: 1;
+  z-index: 1;
+}
+
+.page-appear.page-appear-active {
+opacity: 1;
+transition: opacity 1000ms linear;
+}
+
+/* enter */
+.page-enter {
+  opacity: 1;
+  transform: translateX(100vw);
+}
+
+.page-enter.page-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition: all 500ms ease-out 500ms;
+}
+
+/* exit */
+.page-exit {
+  opacity: 1;
+  transform: translateX(0%);
+
+}
+.page-exit.page-exit-active {
+  opacity: 1;
+  transform: translateX(-100vw);
+  transition: all 500ms ease-in;
+}
+.page-exit-done {
+  opacity: 0;
+}
+
+.message-enter {
+  transform: translateX(100vw);
+}
+.message-enter-active {
+  transform: translateX(0%);
+  transition: all 500ms ease-out;
+}
+.message-exit {
+  transform: translateY(0%);
+}
+.message-exit-active {
+  transform: translateY(-100vw);
+  transition: all 500ms ease-out;
 }

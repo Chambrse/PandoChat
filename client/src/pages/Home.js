@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import Message from '../components/Message';
 import axios from "axios";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 class Home extends Component {
     constructor() {
@@ -84,7 +85,7 @@ class Home extends Component {
         if (!this.props.loggedIn) { return <Redirect to='/login'></Redirect> }
 
         return (
-            <div id='chatWindow'>
+            <div id='chatWindow' style={{ position: 'absolute' }}>
                 <div className='row p-1'>
                     <div className='col'>
                         <img alt='Chatter logo' src={logo} ></img>
@@ -99,7 +100,13 @@ class Home extends Component {
                         this.state.messagesInCarts.map(n => (
                             <div className='col-3 chatCart'>
                                 {n.map((m, index) => (
-                                    <Message key={m.id} id={m.id} username={m.username} msg={m.msg} />
+                                    <CSSTransition
+                                        in={true}
+                                        timeout={0}
+                                        classNames="message"
+                                    >
+                                        <Message key={m.id} id={m.id} username={m.username} msg={m.msg} />
+                                    </CSSTransition>
                                 ))}
                             </div>
                         ))

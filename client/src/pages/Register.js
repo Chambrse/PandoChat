@@ -75,8 +75,8 @@ class Register extends Component {
         if (this.state.redirectTo) { return <Redirect to={this.state.redirectTo} /> }
         if (this.props.loggedIn) { return <Redirect t0='/home' /> }
         return (
-            <div className='container'>
-                <div className='row fadeInRight' id='whiteWindow'>
+            <div style={{ position: 'absolute' }} >
+                <div className='row' id='whiteWindow'>
                     <div className='col'>
                         <div className='row justify-content-center'>
                             <img alt='chatter logo' src={logo}></img>
