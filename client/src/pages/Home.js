@@ -48,7 +48,7 @@ class Home extends Component {
     addMessage(message) {
         this.setState({ messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }] });
 
-        
+
         if (this.state.messagesInCarts.length > 0) {
             let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
             if (lastCart.length === 5) {
@@ -101,8 +101,8 @@ class Home extends Component {
                 </div>
                 <div className='row p-2 d-flex flex-nowrap' id='chatSled'>
                     {this.state.messagesInCarts.length > 0 ? (
-                        this.state.messagesInCarts.map(n => (
-                            <div className='col-3 chatCart'>
+                        this.state.messagesInCarts.map((n, index) => (
+                            <div key={index} style={{ position: 'relative' }} className='col-3 chatCart'>
                                 <TransitionGroup>
                                     {n.map((m, index) => (
                                         <CSSTransition
