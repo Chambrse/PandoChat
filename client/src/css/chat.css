@@ -18,7 +18,7 @@
     position: relative;
 }
 
-.message {
+.messages {
     border: 1px black solid;
     border-radius: 5px;
     margin: 0;
@@ -26,3 +26,20 @@
     word-wrap: break-word;
     position: relative;
 }
+
+
+.message-enter {
+    transform: translateX(100vw);
+  }
+  .message-enter-active {
+    transform: translateX(0%);
+    transition: all 500ms ease-out;
+  }
+  .message-exit {
+    transform: translateY(0%);
+  }
+  .message-exit-active {
+    transform: translateY(-100vw);
+    transition: all 500ms ease-out;
+  }
+  

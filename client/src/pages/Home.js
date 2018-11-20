@@ -5,7 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import Message from '../components/Message';
 import axios from "axios";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
 
 class Home extends Component {
     constructor() {
@@ -19,7 +19,6 @@ class Home extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
-        // this.componentWillUpdate = this.componentWillUpdate.bind(this);
         this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
         this.logOut = this.logOut.bind(this);
@@ -99,15 +98,19 @@ class Home extends Component {
                     {this.state.messagesInCarts.length > 0 ? (
                         this.state.messagesInCarts.map(n => (
                             <div className='col-3 chatCart'>
-                                {n.map((m, index) => (
-                                    <CSSTransition
-                                        in={true}
-                                        timeout={0}
-                                        classNames="message"
-                                    >
-                                        <Message key={m.id} id={m.id} username={m.username} msg={m.msg} />
-                                    </CSSTransition>
-                                ))}
+                                <TransitionGroup>
+                                    {n.map((m, index) => (
+                                        <CSSTransition
+                                            in={true}
+                                            enter={true}
+                                            timeout={1000}
+                                            classNames="message"
+                                            unmountOnExit
+                                        >
+                                            <Message key={m.id} id={m.id} username={m.username} msg={m.msg} />
+                                        </CSSTransition>
+                                    ))}
+                                </TransitionGroup>
                             </div>
                         ))
                     ) : null}

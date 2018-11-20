@@ -36,7 +36,6 @@ class Register extends Component {
 
         switch (event.target.name) {
             case 'username':
-                console.log('usernamechange');
                 if (value.length < 5 || value.length > 20) { newErrors.push('Username must be between 5 and 20 characters.') };
                 this.setState({ usernameErrors: newErrors })
                 break;
@@ -65,15 +64,13 @@ class Register extends Component {
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
-                this.setState({ redirectTo: '/home' })
             }
         });
         event.preventDefault();
     }
 
     render() {
-        if (this.state.redirectTo) { return <Redirect to={this.state.redirectTo} /> }
-        if (this.props.loggedIn) { return <Redirect t0='/home' /> }
+        if (this.props.loggedIn) { return <Redirect to='/home' /> }
         return (
             <div style={{ position: 'absolute' }} >
                 <div className='row' id='whiteWindow'>
@@ -97,9 +94,9 @@ class Register extends Component {
                                         <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} />
                                         {this.state.usernameErrors.length > 0 ? (
                                             this.state.usernameErrors.map((element, index) => (
-                                                <div key={index} className='invalid-feedback'>
+                                                <p key={index} className='errorClass'>
                                                     {element}
-                                                </div>
+                                                </p>
                                             ))
                                         ) : null}
                                     </div>
@@ -110,9 +107,9 @@ class Register extends Component {
                                         <input type="text" name='email' className={`form-control ${this.state.emailErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.email} onChange={this.handleChange} />
                                         {this.state.emailErrors.length > 0 ? (
                                             this.state.emailErrors.map((element, index) => (
-                                                <div key={index} className='invalid-feedback'>
+                                                <p key={index} className='errorClass'>
                                                     {element}
-                                                </div>
+                                                </p>
                                             ))
                                         ) : null}
                                     </div>
@@ -120,12 +117,12 @@ class Register extends Component {
                                         <label>
                                             Password:
                                     </label>
-                                        <input type="text" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} />
+                                        <input type="password" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} />
                                         {this.state.passwordErrors.length > 0 ? (
                                             this.state.passwordErrors.map((element, index) => (
-                                                <div key={index} className='invalid-feedback'>
+                                                <p key={index} className='errorClass'>
                                                     {element}
-                                                </div>
+                                                </p>
                                             ))
                                         ) : null}
                                     </div>
@@ -133,12 +130,12 @@ class Register extends Component {
                                         <label>
                                             Re-enter Password:
                                     </label>
-                                        <input type="text" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} />
+                                        <input type="password" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} />
                                         {this.state.passwordMatchErrors.length > 0 ? (
                                             this.state.passwordMatchErrors.map((element, index) => (
-                                                <div key={index} className='invalid-feedback'>
+                                                <p key={index} className='errorClass'>
                                                     {element}
-                                                </div>
+                                                </p>
                                             ))
                                         ) : null}
                                     </div>

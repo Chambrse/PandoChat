@@ -84,7 +84,7 @@ router.post("/register", function (req, res) {
             password: req.body.password
         }).then(function (data) {
 
-            req.login({ user_id: data._id, username: data.username }, function (err) {
+            req.login({ user: { user_id: data._id, username: data.username } }, function (err) {
 
                 if (err) throw err;
 
