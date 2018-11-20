@@ -3,6 +3,7 @@ var user = require("../database/models/user");
 var router = express.Router();
 var passport = require("passport");
 
+// Log out route
 router.get("/logout", function (req, res) {
     req.logout();
     req.session.destroy(() => {
@@ -11,6 +12,7 @@ router.get("/logout", function (req, res) {
     })
 });
 
+// Returns user info (from the session data) if the user is authenticated.
 router.get("/user", function (req, res) {
     console.log('user route');
     if (req.isAuthenticated()) {
@@ -22,6 +24,7 @@ router.get("/user", function (req, res) {
     }
 });
 
+// Log in a user
 router.post("/login", passport.authenticate("local", {
     failureflash: true
 }), function (req, res) {
@@ -31,7 +34,7 @@ router.post("/login", passport.authenticate("local", {
         res.send({ loggedIn: true, user: req.session.passport.user });
     });
 });
-
+// Regiser a new user.
 router.post("/register", function (req, res) {
 
     req.checkBody('username', 'Username field cannot be empty.').notEmpty();
@@ -101,6 +104,7 @@ router.post("/register", function (req, res) {
     };
 });
 
+// Session parse middleware:
 passport.serializeUser(function (user_id, done) {
     done(null, user_id);
 });

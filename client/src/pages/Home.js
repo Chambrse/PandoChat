@@ -25,6 +25,7 @@ class Home extends Component {
     };
 
     componentDidMount() {
+        // If you're logged in, initialize the socket, and keydown event listener.
         if (this.props.loggedIn) {
             console.log('socket initialize');
             this.socket = io(window.location.host);
@@ -35,6 +36,7 @@ class Home extends Component {
 
     handleKeydown(event) {
         let { user } = this.props;
+        // On enter, emit the message.
         if (event.keyCode === 13 && this.props.loggedIn) {
             console.log(user);
             this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username });
@@ -42,9 +44,11 @@ class Home extends Component {
         }
     }
 
+    // Add a message to the state ( And format it for the carts.)
     addMessage(message) {
         this.setState({ messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }] });
 
+        
         if (this.state.messagesInCarts.length > 0) {
             let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
             if (lastCart.length === 5) {
@@ -73,6 +77,7 @@ class Home extends Component {
         });
     }
 
+    // Log out
     logOut() {
         console.log('logout running')
         axios.get('/logout').then(response => {

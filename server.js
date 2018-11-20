@@ -21,14 +21,12 @@ const PORT = process.env.PORT || 3001;
 const dbConnection = require('./database');
 var user = require("./database/models/user");
 
-
 // Make the server
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
 
-// console.log("node_env", process.env.NODE_ENV);
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
@@ -49,29 +47,30 @@ io.use(sharedsession(session({ secret: "keyboard cat", resave: false, store: new
 var authRoutes = require('./routes/auth.js');
 app.use('/', authRoutes);
 
+// Passport strategies
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
 }, function (req, email, password, done) {
 
+    // Search the database for the user.
     user.findOne({ email: email }).then(function (results, err) {
-
-        console.log("sequelize error", err);
 
         if (err) { return done(err); };
 
         if (!results) {
-            console.log("no results from database");
-            // done(null, false, req.flash('message', "Email not found."));
+            // If there are no results, authentication failure.
             done(null, false, { message: "Email not found." });
         } else {
 
             const returnedUser = new user(results);
 
             if (returnedUser.checkPassword(password)) {
+                // If the password is correct, log in.
                 return done(null, { loggedIn: true, user: results});
             } else {
+                // If the password is incorrect, authentication failure.
                 return done(null, false, { message: 'incorrect password.'});
             }
         }
@@ -84,8 +83,10 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
+// Start the server.
 server.listen(PORT, function () {
     console.log('Server listening on port: ' + PORT);
 });
 
+// Run the socket.io code.
 require("./routes/socket_functions")(io);

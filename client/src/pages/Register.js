@@ -31,6 +31,7 @@ class Register extends Component {
             [event.target.name]: event.target.value,
         });
 
+        // Client side, HOT input validation
         const value = event.target.value;
         const newErrors = [];
 
