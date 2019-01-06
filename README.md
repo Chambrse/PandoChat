@@ -7,7 +7,7 @@ The purpose of this project is to experiment with alternative chat user interfac
 This is my passion/side project while I'm a student in the Coding Boot Camp at the University of Arizona. The idea came to me before my web development education started, and I've been regularly refactoring it as I learn new tools. It started as a static web page with an input box and a mock-up of what the UI structure could look like. Then, upon learning express, mysql, and heroku, I had enough to actually make a chat room. I improved the UI slightly, and added user authentication using passport. Going forward, I plan to incorporate mocha and chai for testing, and conform to a standard coding style using eslint.
 
 ## Deployed version
-https://chatter-48124.herokuapp.com/
+Coming Soon!
 
 ### Contributors
 Shane Chambry
