@@ -12,7 +12,10 @@ module.exports = function (io) {
     io.sockets.on("connection", function (socket) {
 
         console.log('handshake', socket.handshake.session);
-        let username = socket.handshake.session.passport.user.user.username;
+        let username;
+        if (socket.handshake.session.passport) {
+            username = socket.handshake.session.passport.user.user.username;
+        }
         // let username = 'placeholder';
         console.log('usernamecoderunning');
 
