@@ -65,9 +65,16 @@ class Home extends Component {
             let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
             if ((currentCartHeight + messageHeight) >= (chatSledHeight-15)) {
                 console.log('new cart')
-                this.setState({ messagesInCarts: [...this.state.messagesInCarts, [{ id: message.id, username: message.username, msg: message.msg }]], currentCartHeight: 0 })
+                this.setState({ messagesInCarts: [...this.state.messagesInCarts, []], currentCartHeight: 0 })
+                let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
+                lastCart.push({ id: message.id, username: message.username, msg: message.msg })
+                let newCarts = this.state.messagesInCarts;
+                newCarts.pop();
+                newCarts.push(lastCart);
+                console.log(newCarts);
+                this.setState({ messagesInCarts: newCarts })
                 // Upon adding new cart, scroll to the bottom of the div
-                this.scrollToBottomOfChatSled();
+                // this.scrollToBottomOfChatSled();
             } else {
                 console.log('add message to last cart')
                 lastCart.push({ id: message.id, username: message.username, msg: message.msg })
@@ -131,12 +138,12 @@ class Home extends Component {
                     <div className='col text-center'><button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button></div>
                 </div>
                 <div className='row'>
-                    <input type='text' className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
+                    <input type='text' placeholder='Send a message' autocomplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                 </div>
                 <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
                     {this.state.messagesInCarts.length > 0 ? (
                         this.state.messagesInCarts.map((n, index) => (
-                            <div key={index} id={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative' }} className='col-3 chatCart'>
+                            <div key={index} id={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ backgroundColor: 'black', position: 'relative' }} className='col-3 chatCart'>
                                 <TransitionGroup>
                                     {n.map((m, index) => (
                                         <CSSTransition
