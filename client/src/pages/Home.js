@@ -15,9 +15,11 @@ class Home extends Component {
             messages: [],
             messageSizer: '',
             messageSizerBoolean: false,
-            messagesInCarts: [],
+            messagesInCarts: [[], [], [], []],
             messageInput: '',
-            currentCartHeight: 0
+            currentCartIndex: 0,
+            currentCartHeight: 0,
+            sim: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,6 +27,8 @@ class Home extends Component {
         this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
         this.logOut = this.logOut.bind(this);
+        this.chatSim = this.chatSim.bind(this);
+
     };
 
     componentDidMount() {
@@ -49,57 +53,51 @@ class Home extends Component {
 
     // Add a message to the state ( And format it  for the carts.)
     addMessage(message) {
+        // add the message to the messages state array
         this.setState({ messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }] });
+        // put the message into the messageSizer, which will be used to measure the height of this message.
         this.setState({ messageSizer: { id: message.id, username: message.username, msg: message.msg }, messageSizerBoolean: true });
-
-
-        if (this.state.messagesInCarts.length > 0) {
-            let messageHeight = this.messageSizerDiv.clientHeight;
-            let chatSledHeight = this.chatSled.clientHeight;
-            this.setState({ currentCartHeight: this.state.currentCartHeight + messageHeight});
-            console.log("cart length - 1", this.state.messagesInCarts.length - 1);
-            let currentCartHeight = this.state.currentCartHeight;
-            console.log("height of this message", messageHeight);
-            console.log("Chatsled height", chatSledHeight);
-            console.log("Chatcart Height", currentCartHeight);
-            let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
-            if ((currentCartHeight + messageHeight) >= (chatSledHeight-15)) {
-                console.log('new cart')
-                this.setState({ messagesInCarts: [...this.state.messagesInCarts, []], currentCartHeight: 0 })
-                let lastCart = this.state.messagesInCarts[this.state.messagesInCarts.length - 1];
-                lastCart.push({ id: message.id, username: message.username, msg: message.msg })
-                let newCarts = this.state.messagesInCarts;
-                newCarts.pop();
-                newCarts.push(lastCart);
-                console.log(newCarts);
-                this.setState({ messagesInCarts: newCarts })
-                // Upon adding new cart, scroll to the bottom of the div
-                // this.scrollToBottomOfChatSled();
-            } else {
-                console.log('add message to last cart')
-                lastCart.push({ id: message.id, username: message.username, msg: message.msg })
-                let newCarts = this.state.messagesInCarts;
-                newCarts.pop();
-                newCarts.push(lastCart);
-                console.log(newCarts);
-                this.setState({ messagesInCarts: newCarts })
+        // Get the height of the current message from the messageSizer
+        let messageHeight = this.messageSizerDiv.clientHeight;
+        // Get the height to the chatSled
+        let chatSledHeight = this.chatSled.clientHeight;
+        // update the currentCartHeight to include the current message
+        this.setState({ currentCartHeight: this.state.currentCartHeight + messageHeight });
+        let currentCartHeight = this.state.currentCartHeight;
+        // If adding the message to the current cart would cause it to overflow the vertical div,
+        if ((currentCartHeight + messageHeight) >= (chatSledHeight - 15)) {
+            // iterate the cart that messages are being added to
+            this.setState({
+                currentCartIndex: this.state.currentCartIndex + 1,
+                currentCartHeight: 0
+            });
+            // if The next cart does not exist
+            if (!this.state.messagesInCarts[this.state.currentCartIndex]) {
+                // add 3 more carts
+                this.setState({ messagesInCarts: [...this.state.messagesInCarts, [], [], []] })
+                // scroll to the end for visibility
+                this.scrollToBottomOfChatSled();
             }
-            console.log(lastCart);
-        } else {
-            console.log('start of structure');
-            this.setState({ messagesInCarts: [[{ id: message.id, username: message.username, msg: message.msg }]] })
         }
 
+        // Add the message to the appropriate cart.
+        let arrayToSplice = this.state.messagesInCarts;
+        let currentCart = this.state.messagesInCarts[this.state.currentCartIndex];
+        currentCart.push({ id: message.id, username: message.username, msg: message.msg });
+        arrayToSplice.splice(this.state.currentCartIndex, 1, currentCart);
+        this.setState({
+            messagesInCarts: arrayToSplice
+        })
     }
 
     scrollToBottomOfChatSled() {
-        console.log("scroll function running");
+        // console.log("scroll function running");
         const scrollWidth = this.chatSled.scrollWidth;
-        console.log(scrollWidth);
+        // console.log(scrollWidth);
         const Width = this.chatSled.clientWidth;
-        console.log(Width);
+        // console.log(Width);
         const maxScrollLeft = scrollWidth - Width;
-        console.log(maxScrollLeft);
+        // console.log(maxScrollLeft);
         this.chatSled.scrollLeft = maxScrollLeft > 0 ? maxScrollLeft : 0;
     }
 
@@ -117,6 +115,17 @@ class Home extends Component {
         });
     }
 
+    // Toggle the chat simulator on the server by sending an admin command
+    chatSim() {
+        if (!this.state.sim) {
+            this.setState({ sim: true });
+            this.socket.emit("chat-message", { msg: "admin chatsim", username: "don't matter" });
+        } else {
+            this.setState({ sim: false});
+            this.socket.emit("chat-message", { msg: "admin simOff", username: "don't matter" });
+        }
+    }
+
     render() {
         if (!this.props.loggedIn) { return <Redirect to='/login'></Redirect> }
 
@@ -132,18 +141,18 @@ class Home extends Component {
                         <img alt='Chatter logo' src={logo} ></img>
                         <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
                     </div>
-                    {/* <div className='col text-left'>
-                    Alpha V0.1
-                    </div> */}
-                    <div className='col text-center'><button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button></div>
+                    <div className='col text-center'>
+                        <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br>
+                        <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button>
+                    </div>
                 </div>
                 <div className='row'>
-                    <input type='text' placeholder='Send a message' autocomplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
+                    <input type='text' placeholder='Send a message' autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                 </div>
                 <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
                     {this.state.messagesInCarts.length > 0 ? (
                         this.state.messagesInCarts.map((n, index) => (
-                            <div key={index} id={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ backgroundColor: 'black', position: 'relative' }} className='col-3 chatCart'>
+                            <div key={index} id={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative' }} className='col-3 chatCart'>
                                 <TransitionGroup>
                                     {n.map((m, index) => (
                                         <CSSTransition

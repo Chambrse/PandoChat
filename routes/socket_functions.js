@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Configure web sockets.
 //-----------------------------------------------------------------------------
-// let randomSentence = require("random-sentence");
+let randomSentence = require("random-sentence");
 var user = require("../database/models/user");
 // let randomColor = require('randomcolor');
 
@@ -54,7 +54,7 @@ module.exports = function (io) {
             messageID++;
             new Promise(function (resolve, reject) {
                 setTimeout(function () {
-                    io.sockets.emit("chat-message", { id: messageID, text: randomSentence({ min: 4, max: 9 }), nickname: randomSentence({ min: 1, max: 1 }) });
+                    io.sockets.emit("chat-message", { id: messageID, msg: randomSentence({ min: 4, max: 9 }), username: randomSentence({ min: 1, max: 1 }) });
                     resolve();
                 }, Math.ceil(Math.random() * 1000));
 

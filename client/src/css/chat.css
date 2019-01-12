@@ -13,13 +13,14 @@
 #chatSled {
     overflow-x: scroll;
     height: calc(100vh - 300px);
-    width: 100vw;
+    width: 98vw;
+    scroll-behavior: smooth;
 }
 
 .chatCart {
     padding: 0;
     position: relative;
-    overflow: clip;
+    overflow: visible;
 }
 
 .messages {
