@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import logo from '../images/Chatter_Logo_Transparent.png';
 import '../css/chat.css';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import Message from '../components/Message';
 import axios from "axios";
-import { TransitionGroup, CSSTransition, Transition } from "react-transition-group";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 class Home extends Component {
     constructor() {
@@ -45,7 +45,6 @@ class Home extends Component {
         let { user } = this.props;
         // On enter, emit the message.
         if (event.keyCode === 13 && this.props.loggedIn) {
-            console.log(user);
             this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username });
             this.setState({ messageInput: '' });
         }
@@ -142,7 +141,7 @@ class Home extends Component {
                         <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
                     </div>
                     <div className='col text-center'>
-                        <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br>
+                        <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br><br></br>
                         <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button>
                     </div>
                 </div>
@@ -159,6 +158,7 @@ class Home extends Component {
                                             in={true}
                                             enter={true}
                                             timeout={1000}
+                                            key={m.id}
                                             classNames="message"
                                             unmountOnExit
                                         >

@@ -25,7 +25,6 @@ class App extends Component {
   // On load and refresh, make a request to the server to see if there is a user logged in in the current session.
   getUser() {
     Axios.get('/user').then(response => {
-      console.log(response);
       if (response.data === 'not authenticated.') {
         console.log('not logged in');
       } else {

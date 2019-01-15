@@ -11,16 +11,12 @@ module.exports = function (io) {
 
     io.sockets.on("connection", function (socket) {
 
-        console.log('handshake', socket.handshake.session);
         let username;
         if (socket.handshake.session.passport) {
             username = socket.handshake.session.passport.user.user.username;
         }
-        // let username = 'placeholder';
-        console.log('usernamecoderunning');
 
         messageID++;
-        // console.log('messageID++', messageID);
         io.sockets.emit("chat-message", { id: messageID, username: username, msg: "User Connected" });
 
         socket.on("chat-message", function (message) {
@@ -54,7 +50,7 @@ module.exports = function (io) {
             messageID++;
             new Promise(function (resolve, reject) {
                 setTimeout(function () {
-                    io.sockets.emit("chat-message", { id: messageID, msg: randomSentence({ min: 4, max: 9 }), username: randomSentence({ min: 1, max: 1 }) });
+                    io.sockets.emit("chat-message", { id: messageID, msg: randomSentence({ min: 2, max: 15 }), username: randomSentence({ min: 1, max: 1 }) });
                     resolve();
                 }, Math.ceil(Math.random() * 1000));
 
