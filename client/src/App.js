@@ -62,7 +62,7 @@ class App extends Component {
                         <Login
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState} />
-                      </div>
+                       </div>
                     )} />
                   <Route exact path="/register"
                     render={() => (
