@@ -14,12 +14,13 @@ router.get("/logout", function (req, res) {
 
 // Returns user info (from the session data) if the user is authenticated.
 router.get("/user", function (req, res) {
-    console.log('user route');
+    // console.log('user route');
     if (req.isAuthenticated()) {
-        console.log(req.session);
+        // console.log(JSON.stringify(req.session.passport.user.user.username, null, 3));
+        console.log(req.session.passport.user.user.username + " just logged in.");
         res.send({ data: req.session.passport.user });
     } else {
-        console.log('user route fail')
+        console.log('User not logged in.')
         res.send('not authenticated.');
     }
 });

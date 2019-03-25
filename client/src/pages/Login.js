@@ -43,7 +43,8 @@ class Login extends Component {
     }
 
     render() {
-        if (this.props.loggedIn) { return <Redirect to='/' /> }
+        console.log("login render");
+        if (this.props.loggedIn) { return <Redirect to='/home' /> }
         return (
                 <div style={{ position: 'absolute' }} >
                     <div className='row' id='whiteWindow'>

@@ -31,6 +31,9 @@ module.exports = function (io) {
                     case "simOff":
                         simOn = false;
                         break;
+                    case "sendOneRandom":
+                        sendSingleRandomMessage();
+                        break;
 
                     default:
                         break;
@@ -60,5 +63,10 @@ module.exports = function (io) {
         };
 
     };
+
+    function sendSingleRandomMessage() {
+        messageID++;
+        io.sockets.emit("chat-message", { id: messageID, msg: randomSentence({ min: 2, max: 15 }), username: randomSentence({ min: 1, max: 1 }) });
+    }
 
 };

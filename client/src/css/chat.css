@@ -8,14 +8,38 @@
     margin: 25px 0px;
     padding: 25px;
     height: 100vh;
+    line-height: 110%;
+    /* font-family: 'Medula One', cursive; */
+    /* font-family: 'Francois One', sans-serif; */
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 500;
+
+
+}
+
+#messageSizeTester {
+    padding: 0;
+    width: 24%
+}
+
+#chatterLogo {
+    height: 150px;
 }
 
 #chatSled {
     overflow-x: scroll;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 250px);
     width: 98vw;
     scroll-behavior: smooth;
+    padding-left: 2px;
+    overflow-y: hidden;
 }
+
+/* #scrollbarHider {
+    height: calc(100vh - 265px);
+    overflow-y: hidden;
+    width: 98vw;
+} */
 
 .chatCart {
     padding: 0;
@@ -31,6 +55,15 @@
     word-wrap: break-word;
     position: relative;
     background-color: white;
+}
+
+.selectedMessage {
+    /* background-color: grey; */
+    top: -2px;
+    left: -2px;
+    z-index: 1000;
+    box-shadow: 4px 4px 2px grey;
+    transition: cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
 .messages:hover {

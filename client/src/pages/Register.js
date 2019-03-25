@@ -71,6 +71,7 @@ class Register extends Component {
     }
 
     render() {
+        console.log("register render");
         if (this.props.loggedIn) { return <Redirect to='/home' /> }
         return (
             <div style={{ position: 'absolute' }} >
