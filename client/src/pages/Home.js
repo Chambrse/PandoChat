@@ -24,7 +24,8 @@ class Home extends Component {
             firstMessageId: null,
             latestMessageId: null,
             selectedMessageId: null,
-            numberOfCartsToShow: 10
+            selectedMessage: null,
+            numberOfCartsToShow: 4
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -51,7 +52,7 @@ class Home extends Component {
         let { user } = this.props;
         // On enter, emit the message.
         if (event.keyCode === 13 && this.props.loggedIn) {
-            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username });
+            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username, id: this.state.latestMessageId, replyTo: this.state.selectedMessageId });
             this.setState({ messageInput: '', selectedMessageId: null });
         }
 
@@ -61,12 +62,16 @@ class Home extends Component {
             this.messageInputDiv.focus();
 
             if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
+                let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
                 this.setState({
-                    selectedMessageId: this.state.latestMessageId
+                    selectedMessageId: this.state.latestMessageId,
+                    selectedMessage: messageToSelect
                 });
             } else {
+                let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === (this.state.selectedMessageId - 1))[0];
                 this.setState({
-                    selectedMessageId: this.state.selectedMessageId - 1
+                    selectedMessageId: this.state.selectedMessageId - 1,
+                    selectedMessage: messageToSelect
                 });
             };
         }
@@ -76,7 +81,8 @@ class Home extends Component {
             event.preventDefault();
             if (this.state.selectedMessageId != null) {
                 this.setState({
-                    selectedMessageId: null
+                    selectedMessageId: null,
+                    selectedMessage: null
                 });
                 this.scrollToBottomOfChatSled();
             }
@@ -142,20 +148,14 @@ class Home extends Component {
                 updateStateObj.messagesInCarts = [...this.state.messagesInCarts, [], [], []];
                 moreCarts = true;
 
-                updateStateObj.numberOfCartsToShow = this.state.numberOfCartsToShow + 3;
+                // updateStateObj.numberOfCartsToShow = this.state.numberOfCartsToShow + 3;
 
-                // if (updateStateObj.messagesInCarts.length >= 9) {
-                //     updateStateObj.messagesInCarts = updateStateObj.messagesInCarts.slice(3);
-                //     updateStateObj.firstMessageId = updateStateObj.messagesInCarts[0][0].id;
-                //     updateStateObj.currentCartIndex = updateStateObj.currentCartIndex - 3;
-                //     currentCartIndex = currentCartIndex - 3;
-                // }
-                setTimeout(() => {
-                    console.log("timeout");
-                    this.setState({
-                        numberOfCartsToShow: this.state.numberOfCartsToShow - 3
-                    })
-                }, 3000);
+                // setTimeout(() => {
+                //     console.log("timeout");
+                //     this.setState({
+                //         numberOfCartsToShow: this.state.numberOfCartsToShow - 3
+                //     })
+                // }, 3000);
 
             } else {
                 updateStateObj.messagesInCarts = this.state.messagesInCarts;
@@ -222,8 +222,10 @@ class Home extends Component {
     }
 
     messageClick(messageId) {
+        let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === messageId)[0];
         this.setState({
-            selectedMessageId: messageId
+            selectedMessageId: messageId,
+            selectedMessage: messageToSelect
         });
         this.messageInputDiv.focus();
     }
@@ -247,7 +249,7 @@ class Home extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <input ref={(div) => this.messageInputDiv = div} type='text' placeholder='Send a message' autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
+                    <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username:'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                 </div>
                 <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
                     <div className="col-3" id="messageSizeTester" ref={(div) => this.messageSizerDiv = div} style={{ position: 'fixed', zIndex: '-500', backgroundColor: 'blue' }}>

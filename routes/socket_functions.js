@@ -5,45 +5,63 @@ let randomSentence = require("random-sentence");
 var user = require("../database/models/user");
 // let randomColor = require('randomcolor');
 
+var message = require("../database/models/messages");
+
 
 module.exports = function (io) {
-    let messageID = 0;
+    let messageID;
 
-    io.sockets.on("connection", function (socket) {
+    message.find({}).select("id").sort({ "id": -1 }).limit(1).exec(function (err, doc) {
+        messageID = doc[0].id;
+        console.log("messageid", messageID);
+        io.sockets.on("connection", function (socket) {
 
-        let username;
-        if (socket.handshake.session.passport) {
-            username = socket.handshake.session.passport.user.user.username;
-        }
+            let username;
+            if (socket.handshake.session.passport) {
+                username = socket.handshake.session.passport.user.user.username;
+            }
 
-        messageID++;
-        io.sockets.emit("chat-message", { id: messageID, username: username, msg: "User Connected" });
+            messageID++;
+            io.sockets.emit("chat-message", { id: messageID, username: username, msg: "User Connected" });
 
-        socket.on("chat-message", function (message) {
+            socket.on("chat-message", function (incomingMessage) {
 
-            messageArray = message.msg.split(" ");
-            if (messageArray[0] === "admin") {
-                switch (messageArray[1]) {
-                    case "chatsim":
-                        simOn = true;
-                        chatSim();
-                        break;
-                    case "simOff":
-                        simOn = false;
-                        break;
-                    case "sendOneRandom":
-                        sendSingleRandomMessage();
-                        break;
+                messageArray = incomingMessage.msg.split(" ");
+                if (messageArray[0] === "admin") {
+                    switch (messageArray[1]) {
+                        case "chatsim":
+                            simOn = true;
+                            chatSim();
+                            break;
+                        case "simOff":
+                            simOn = false;
+                            break;
+                        case "sendOneRandom":
+                            sendSingleRandomMessage();
+                            break;
 
-                    default:
-                        break;
-                }
-            } else {
-                messageID++;
-                io.sockets.emit("chat-message", { id: messageID, username: username, msg: message.msg });
-            };
+                        default:
+                            break;
+                    }
+                } else {
+                    messageID++;
+
+                    message.create({
+                        text: incomingMessage.msg,
+                        username: username,
+                        id: messageID,
+                        replyTo: incomingMessage.replyTo || null
+                    }).then(function (data) {
+                        console.log("message added to db");
+                        io.sockets.emit("chat-message", { id: messageID, username: username, msg: incomingMessage.msg });
+                    }).catch(function (err) {
+
+                    });
+
+                };
+            });
+
         });
-
     });
 
 
