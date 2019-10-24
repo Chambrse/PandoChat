@@ -61,6 +61,7 @@ class Register extends Component {
 
     handleSubmit(event) {
         axios.post('/register', this.state).then(response => {
+            console.log(response.data);
             this.setState(response.data);
 
             if (response.data.loggedIn) {
@@ -123,7 +124,7 @@ class Register extends Component {
                                         {this.state.passwordErrors.length > 0 ? (
                                             this.state.passwordErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
-                                                    {element}
+                                                    {element.msg}
                                                 </p>
                                             ))
                                         ) : null}
