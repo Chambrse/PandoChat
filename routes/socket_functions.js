@@ -12,7 +12,9 @@ module.exports = function (io) {
     let messageID;
 
     message.find({}).select("id").sort({ "id": -1 }).limit(1).exec(function (err, doc) {
-        messageID = doc[0].id;
+
+        messageID = doc[0] == undefined ? 0 : doc[0].id; 
+        
         console.log("messageid", messageID);
         io.sockets.on("connection", function (socket) {
 
