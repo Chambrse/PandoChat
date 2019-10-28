@@ -13,9 +13,11 @@
     /* font-family: 'Francois One', sans-serif; */
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 500;
-
+    display: flex;
+    flex-direction: column;
 
 }
+
 
 #messageSizeTester {
     padding: 0;
@@ -35,6 +37,37 @@
     overflow-y: hidden;
 }
 
+#holder {
+    height: 100%;
+    flex: 1 1 auto; 
+}
+
+
+#messageSizer {
+    padding: 0;
+    position: absolute;
+    left: 50px;
+    /* background-color: black; */
+    width: 100%;
+}
+
+#chatFrame{
+    /* background-color: grey; */
+    height: 100%;
+    /* flex: 1 1 auto; */
+    display: flex;
+    align-items: flex-start;
+    /* flex-basis: auto; */
+    /* left: 50px; */
+    width: -webkit-fill-available;
+    position: relative;
+    /* -webkit-transition: all 1s 0s ease-in-out;
+    -moz-transition: all 1s 0s ease-in-out;
+    -o-transition: all 1s 0s ease-in-out;
+    transition: all 1s 0s ease-in-out; */
+    transition: transform 2s ease-in-out;
+}
+
 /* #scrollbarHider {
     height: calc(100vh - 265px);
     overflow-y: hidden;
@@ -45,6 +78,9 @@
     padding: 0;
     position: relative;
     overflow: visible;
+    /* background-color: blue; */
+    /* height: 100%; */
+    /* flex: 1 1 auto; */
 }
 
 .messages {
@@ -55,6 +91,7 @@
     word-wrap: break-word;
     position: relative;
     background-color: white;
+    animation: slidein .25s ease;
 }
 
 .selectedMessage {
@@ -89,5 +126,16 @@
   .message-exit-active {
     transform: translateY(-100vw);
     transition: all 500ms ease-out;
+  }
+
+@keyframes slidein {
+   0%   { 
+   transform: translateX(50px); 
+   opacity: 0		
+   }
+   100% { 
+   transform: translateX(0px); 
+   opacity: 1
+   }
   }
   

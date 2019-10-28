@@ -48,7 +48,7 @@ class App extends Component {
     if (this.state.loading === 'initial') { return <Loading /> }
     return (
       <Router>
-        {/* <Route
+        <Route
           render={({ location }) => (
             <TransitionGroup>
               <CSSTransition
@@ -56,41 +56,41 @@ class App extends Component {
                 appear={true}
                 classNames="page"
                 timeout={1000}
-              > */}
-        <Switch /* location={location} */>
-          <Route exact path="/login"
-            render={() => (
-              <div className='container' style={{ position: 'relative' }}>
-                <Login
-                  loggedIn={this.state.loggedIn}
-                  updateAppState={this.updateAppState} />
-              </div>
-            )} />
-          <Route exact path="/register"
-            render={() => (
-              <div className='container' style={{ position: 'relative' }}>
-                <Register
-                  loggedIn={this.state.loggedIn}
-                  updateAppState={this.updateAppState}
-                />
-              </div>
-            )} />
-          <Route path="/home"
-            render={() => (
-              <div style={{ position: 'relative' }}>
-                <Home
-                  loggedIn={this.state.loggedIn}
-                  updateAppState={this.updateAppState}
-                  user={this.state.user}
-                />
-              </div>
-            )} />
-          <Route path="/" render={() => <Redirect to="/home"/>} />
-          <Route render={() => <div>Not Found</div>} />
-        </Switch>
-        {/* </CSSTransition>
+              >
+                <Switch location={location} >
+                  <Route exact path="/login"
+                    render={() => (
+                      <div className='container' style={{ position: 'relative' }}>
+                        <Login
+                          loggedIn={this.state.loggedIn}
+                          updateAppState={this.updateAppState} />
+                      </div>
+                    )} />
+                  <Route exact path="/register"
+                    render={() => (
+                      <div className='container' style={{ position: 'relative' }}>
+                        <Register
+                          loggedIn={this.state.loggedIn}
+                          updateAppState={this.updateAppState}
+                        />
+                      </div>
+                    )} />
+                  <Route path="/home"
+                    render={() => (
+                      <div style={{ position: 'relative' }}>
+                        <Home
+                          loggedIn={this.state.loggedIn}
+                          updateAppState={this.updateAppState}
+                          user={this.state.user}
+                        />
+                      </div>
+                    )} />
+                  <Route path="/" render={() => <Redirect to="/home" />} />
+                  <Route render={() => <div>Not Found</div>} />
+                </Switch>
+              </CSSTransition>
             </TransitionGroup>
-          )} /> */}
+          )} />
       </Router>
     );
   }

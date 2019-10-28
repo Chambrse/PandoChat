@@ -32,7 +32,7 @@ module.exports = function (io) {
                 if (messageArray[0] === "admin") {
                     switch (messageArray[1]) {
                         case "chatsim":
-                            simOn = true;
+                            simOn = true;          
                             chatSim();
                             break;
                         case "simOff":
