@@ -49,9 +49,10 @@
     left: 50px;
     /* background-color: black; */
     width: 100%;
+    z-index: -1;
 }
 
-#chatFrame{
+.chatFrame{
     /* background-color: grey; */
     height: 100%;
     /* flex: 1 1 auto; */
@@ -89,9 +90,8 @@
     margin: 0;
     box-shadow: 2px 2px 1px grey;
     word-wrap: break-word;
-    position: relative;
+    /* position: relative; */
     background-color: white;
-    animation: slidein .25s ease;
 }
 
 .selectedMessage {

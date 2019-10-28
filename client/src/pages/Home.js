@@ -29,7 +29,8 @@ class Home extends Component {
             frameWidth: null,
             left: 0,
             numberOfColumns: 4,
-            transitionString: 'transform 2s ease-in-out'
+            transitionString: 'transform 2s ease-in-out',
+            scrolledCartIndex: 0
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -99,27 +100,36 @@ class Home extends Component {
             this.scrollToBottom();
         }
 
+        //left
         else if (event.keyCode === 37) {
             event.preventDefault();
-            this.setState({
-                left: this.state.left + (this.chatFrame.clientWidth / this.state.numberOfColumns),
-                transitionString: 'transform 0.5s ease-in-out'
-            })
+            if (this.state.scrolledCartIndex > 0) {
+                this.setState({
+                    left: this.state.left + (this.chatFrame.clientWidth / this.state.numberOfColumns),
+                    transitionString: 'transform 0.5s ease-in-out',
+                    scrolledCartIndex: this.state.scrolledCartIndex - 1
+                })
+            }
         }
 
+        //right
         else if (event.keyCode === 39) {
             event.preventDefault();
-            this.setState({
-                left: this.state.left - (this.chatFrame.clientWidth / this.state.numberOfColumns),
-                transitionString: 'transform 0.5s ease-in-out'
-            })
+            if (this.state.scrolledCartIndex < this.state.messagesInCarts.length - this.state.numberOfColumns) {
+                this.setState({
+                    left: this.state.left - (this.chatFrame.clientWidth / this.state.numberOfColumns),
+                    transitionString: 'transform 0.5s ease-in-out',
+                    scrolledCartIndex: this.state.scrolledCartIndex + 1
+                })
+            }
         }
     }
 
     scrollToBottom() {
         this.setState({
-            left: (this.chatFrame.clientWidth / this.state.numberOfColumns) * (this.state.messagesInCarts.length - 4) * -1,
-            transitionString: 'transform 2s ease-in-out'
+            left: (this.chatFrame.clientWidth / this.state.numberOfColumns) * (this.state.messagesInCarts.length - this.state.numberOfColumns) * -1,
+            transitionString: 'transform 2s ease-in-out',
+            scrolledCartIndex: this.state.messagesInCarts.length - this.state.numberOfColumns
         })
     }
 
@@ -141,9 +151,9 @@ class Home extends Component {
 
             let chatCartHeight = this['chatCart_' + this.state.currentCartIndex].clientHeight;
 
-            console.log("messageHeight", messageHeight);
-            console.log("chat frame height", chatFrameHeight);
-            console.log("chat cart height", chatCartHeight);
+            // console.log("messageHeight", messageHeight);
+            // console.log("chat frame height", chatFrameHeight);
+            // console.log("chat cart height", chatCartHeight);
 
             let messageTooBig = (chatCartHeight + messageHeight) >= (chatFrameHeight);
             let pastHalf = (chatCartHeight + messageHeight) >= (chatFrameHeight / 2);
@@ -180,13 +190,18 @@ class Home extends Component {
             arrayToSplice.splice(currentCartIndex, 1, currentCart);
             updateStateObj.messagesInCarts = arrayToSplice;
 
+            let moreCarts;
+
             if (pastHalf && !nextCartExists) {
                 updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, [], [], []]
+                moreCarts = true;
             }
 
             // Make all of the required state changes at once.
             this.setState(updateStateObj, () => {
-                if (this.state.selectedMessage == null) {
+                let isNotScrolled = (this.state.scrolledCartIndex == this.state.messagesInCarts.length - (this.state.numberOfColumns + (this.state.numberOfColumns - 1)));
+                console.log("notScrolled", isNotScrolled);
+                if (this.state.selectedMessage == null && moreCarts && isNotScrolled) {
                     this.scrollToBottom();
                 }
             });
@@ -255,7 +270,7 @@ class Home extends Component {
                     <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                 </div>
                 <div className='p-1 row' id='holder'>
-                    <div ref={(div) => this.chatFrame = div} id='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString  }}>
+                    <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
                         <div id='messageSizer'>
                             {this.state.messages.map((m, index) => (
                                 <div ref={(div) => { this['message_Sizer_' + m.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
@@ -269,9 +284,11 @@ class Home extends Component {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                    <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.map((n, index) => (
-                                <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative', minWidth: `${((1 / this.state.numberOfColumns) * 100)}%`}} className='chatCart'>
+                                <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative', minWidth: `${((1 / this.state.numberOfColumns) * 100)}%` }} className='chatCart'>
                                     {n.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
@@ -280,6 +297,7 @@ class Home extends Component {
                                             id={m.id}
                                             username={m.username}
                                             msg={m.msg}
+                                            animation={'slidein .25s ease'}
                                             display={index > this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
                                     ))}
                                 </div>
