@@ -16,7 +16,7 @@ class Home extends Component {
             messages: [],
             messageSizer: null,
             messageSizerBoolean: false,
-            messagesInCarts: [[], [], [], []],
+            messagesInCarts: [{ messages: [], index: 0}, { messages: [], index: 1}, { messages: [], index: 2}, { messages: [], index: 3}],
             messageInput: '',
             currentCartIndex: 0,
             currentCartHeight: 0,
@@ -152,6 +152,10 @@ class Home extends Component {
 
             let chatFrameHeight = this.chatFrame.clientHeight;
 
+            console.log(this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length));
+            console.log(this.state.messagesInCarts);
+            console.log(this.state.currentCartIndex);
+            console.log(this.state.messagesInCarts.length - this.state.numberOfCartsToShow)
             let chatCartHeight = this['chatCart_' + this.state.currentCartIndex].clientHeight;
 
             // console.log("messageHeight", messageHeight);
@@ -188,15 +192,20 @@ class Home extends Component {
             }
 
             let arrayToSplice = updateStateObj.messagesInCarts;
-            let currentCart = arrayToSplice[currentCartIndex];
+            let currentCartObject = arrayToSplice[currentCartIndex];
+            let currentCart = arrayToSplice[currentCartIndex].messages;
             currentCart.push({ id: message.id, username: message.username, msg: message.msg });
-            arrayToSplice.splice(currentCartIndex, 1, currentCart);
+            arrayToSplice.splice(currentCartIndex, 1, { messages: currentCart, index: currentCartObject.index});
             updateStateObj.messagesInCarts = arrayToSplice;
 
             let moreCarts;
 
             if (pastHalf && !nextCartExists) {
-                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, [], [], []];
+                let indexOfLastExistingCart = updateStateObj.messagesInCarts[updateStateObj.messagesInCarts.length - 1].index
+                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, 
+                    {messages: [], index: indexOfLastExistingCart + 1},
+                    {messages: [], index: indexOfLastExistingCart + 2},
+                    {messages: [], index: indexOfLastExistingCart + 3}];
                 moreCarts = true;
             }
 
@@ -305,9 +314,9 @@ class Home extends Component {
                     </div>
                     <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
                         {this.state.messagesInCarts.length > 0 ? (
-                            this.state.messagesInCarts.map((n, index) => (
-                                <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * index}%` }} className='chatCart'>
-                                    {n.map((m, index2) => (
+                            this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
+                                <div key={n.index} cartId={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
+                                    {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
                                             // width={(1 / this.state.numberOfColumns) * 100}
@@ -316,7 +325,7 @@ class Home extends Component {
                                             username={m.username}
                                             msg={m.msg}
                                             animation={'slidein .25s ease'}
-                                            display={index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
+                                            display={n.index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
                                     ))}
                                 </div>
                             ))
