@@ -14,7 +14,7 @@ class Home extends Component {
 
         this.state = {
             messages: [],
-            messageSizer: '',
+            messageSizer: null,
             messageSizerBoolean: false,
             messagesInCarts: [[], [], [], []],
             messageInput: '',
@@ -134,7 +134,10 @@ class Home extends Component {
     }
 
     addMessage2(message) {
-        this.setState({ messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }] }, () => {
+        this.setState({
+            messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }],
+            messageSizer: { id: message.id, username: message.username, msg: message.msg }
+        }, () => {
             let updateStateObj = {};
 
             // Define this message as the first message if one was not already specified.
@@ -193,9 +196,11 @@ class Home extends Component {
             let moreCarts;
 
             if (pastHalf && !nextCartExists) {
-                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, [], [], []]
+                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, [], [], []];
                 moreCarts = true;
             }
+
+            // updateStateObj.messages = [];
 
             // Make all of the required state changes at once.
             this.setState(updateStateObj, () => {
@@ -271,7 +276,7 @@ class Home extends Component {
                 </div>
                 <div className='p-1 row' id='holder'>
                     <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
-                        <div id='messageSizer'>
+                        {/* <div id='messageSizer'>
                             {this.state.messages.map((m, index) => (
                                 <div ref={(div) => { this['message_Sizer_' + m.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
                                     <Message onClick={this.messageClick}
@@ -283,12 +288,25 @@ class Home extends Component {
                                     />
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
+                        {this.state.messageSizer ? (
+                            <div id='messageSizer'>
+                                <div ref={(div) => { this['message_Sizer_' + this.state.messageSizer.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
+                                    <Message onClick={this.messageClick}
+                                        classNames={this.state.messageSizer.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
+                                        key={this.state.messageSizer.id}
+                                        id={this.state.messageSizer.id}
+                                        username={this.state.messageSizer.username}
+                                        msg={this.state.messageSizer.msg}
+                                    />
+                                </div>
+                            </div>
+                        ) : null}
                     </div>
                     <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.map((n, index) => (
-                                <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative', minWidth: `${((1 / this.state.numberOfColumns) * 100)}%` }} className='chatCart'>
+                                <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * index}%` }} className='chatCart'>
                                     {n.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
@@ -298,7 +316,7 @@ class Home extends Component {
                                             username={m.username}
                                             msg={m.msg}
                                             animation={'slidein .25s ease'}
-                                            display={index > this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
+                                            display={index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
                                     ))}
                                 </div>
                             ))
