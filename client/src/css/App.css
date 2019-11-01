@@ -1,10 +1,14 @@
 body {
   background-image: url(../images/connectwork.png);
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-.opaque {
-  background-color: white;
-  border-radius: 5px;
+
+.centeredAbsolute {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 #whiteWindow {
@@ -12,6 +16,11 @@ body {
   background-color: white;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
   margin: 25px;
+}
+
+.opaque {
+  background-color: white;
+  border-radius: 5px;
 }
 
 .page-appear {

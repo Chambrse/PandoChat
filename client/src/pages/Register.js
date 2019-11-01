@@ -37,8 +37,12 @@ class Register extends Component {
 
         switch (event.target.name) {
             case 'username':
-                if (value.length < 5 || value.length > 20) { newErrors.push('Username must be between 5 and 20 characters.') };
-                this.setState({ usernameErrors: newErrors })
+                if ((value.length < 5 || value.length > 20)) {
+                     newErrors.push('Username must be between 5 and 20 characters.') 
+                     this.setState({ usernameErrors: ['Username must be between 5 and 20 characters.']});
+                    } else if (this.state.usernameErrors.length > 0) {
+                        this.setState({usernameErrors: []})
+                    };
                 break;
             case 'email':
                 if (!validator.isEmail(value)) { newErrors.push('This is not a valid Email.') };
@@ -75,18 +79,18 @@ class Register extends Component {
         console.log("register render");
         if (this.props.loggedIn) { return <Redirect to='/home' /> }
         return (
-            <div style={{ position: 'absolute' }} >
+            <div className='centeredAbsolute' style={{ position: 'absolute' }}>
                 <div className='row' id='whiteWindow'>
                     <div className='col'>
                         <div className='row justify-content-center'>
                             <img alt='chatter logo' src={logo}></img>
                         </div>
                         <div className='row'>
-                            <div className='col text-center align-middle p-2'>
+                            <div className='col-md-6 col-sm-12 text-center align-middle p-2'>
                                 Welcome to Chatter! The chat room for everyone. To join in the conversation, please sign up.
                                 <p>Already have an account? <Link to='/login'>Log In</Link></p>
                             </div>
-                            <div className='col'>
+                            <div className='col-md-6 col-sm-12'>
                                 <h2>Register:</h2>
                                 <br></br>
                                 <form onSubmit={this.handleSubmit}>
@@ -94,7 +98,7 @@ class Register extends Component {
                                         <label>
                                             Username:
                                     </label>
-                                        <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} />
+                                        <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} autocomplete="off"/>
                                         {this.state.usernameErrors.length > 0 ? (
                                             this.state.usernameErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
@@ -120,11 +124,11 @@ class Register extends Component {
                                         <label>
                                             Password:
                                     </label>
-                                        <input type="password" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} />
+                                        <input type="password" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} autocomplete="off"/>
                                         {this.state.passwordErrors.length > 0 ? (
                                             this.state.passwordErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
-                                                    {element.msg}
+                                                    {element}
                                                 </p>
                                             ))
                                         ) : null}
@@ -133,7 +137,7 @@ class Register extends Component {
                                         <label>
                                             Re-enter Password:
                                     </label>
-                                        <input type="password" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} />
+                                        <input type="password" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} autocomplete="off"/>
                                         {this.state.passwordMatchErrors.length > 0 ? (
                                             this.state.passwordMatchErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
