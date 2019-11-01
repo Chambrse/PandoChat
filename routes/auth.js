@@ -3,6 +3,13 @@ var user = require("../database/models/user");
 var router = express.Router();
 var passport = require("passport");
 
+//Fb login
+router.get('/auth/facebook', passport.authenticate('facebook'));
+
+//fb redirect
+router.get('/auth/facebook/callback',
+  passport.authenticate('facebook'));
+
 // Log out route
 router.get("/logout", function (req, res) {
     req.logout();

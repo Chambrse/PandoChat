@@ -12,6 +12,7 @@ const MongoStore = require('connect-mongo')(session);
 const passport = require("passport");
 const expressValidator = require("express-validator");
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const bcrypt = require('bcryptjs');
 const sharedsession = require("express-socket.io-session");
 
@@ -71,11 +72,25 @@ passport.use(new LocalStrategy({
                 return done(null, { loggedIn: true, user: results});
             } else {
                 // If the password is incorrect, authentication failure.
-                return done(null, false, { message: 'incorrect password.'});
+                return done(null, false, { message: 'Incorrect password.'});
             }
         }
     });
 }));
+
+passport.use(new FacebookStrategy({
+    clientID: process.env.fbAppId || '1454941151324130',
+    clientSecret: process.env.fbAppSecret || 'f175c582b052bf19d366203ba6cabd42',
+    callbackURL: "http://www.example.com/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(accessToken);
+    console.log(refreshToken);
+    console.log(profile);
+    // console.log(don);
+  }
+));
+
 
 // Send every request to the React app
 // Define any API routes before this runs

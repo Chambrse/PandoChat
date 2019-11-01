@@ -98,6 +98,7 @@ class Login extends Component {
                                         ) : null}
                                     </div>
                                 </form>
+                                <a href="/auth/facebook">Login with Facebook</a>
                             </div>
                         </div>
                     </div>
