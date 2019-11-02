@@ -62,17 +62,17 @@ passport.use(new LocalStrategy({
 
         if (!results) {
             // If there are no results, authentication failure.
-            done(null, false, { message: "Email not found." });
+            return done(null, false, { message: "Email not found." });
         } else {
 
             const returnedUser = new user(results);
 
             if (returnedUser.checkPassword(password)) {
                 // If the password is correct, log in.
-                return done(null, { loggedIn: true, user: results});
+                return done(null, { loggedIn: true, user: results });
             } else {
                 // If the password is incorrect, authentication failure.
-                return done(null, false, { message: 'Incorrect password.'});
+                return done(null, false, { message: 'Incorrect password.' });
             }
         }
     });
@@ -81,14 +81,25 @@ passport.use(new LocalStrategy({
 passport.use(new FacebookStrategy({
     clientID: process.env.fbAppId || '1454941151324130',
     clientSecret: process.env.fbAppSecret || 'f175c582b052bf19d366203ba6cabd42',
-    callbackURL: "http://www.example.com/auth/facebook/callback"
-  },
-  function(accessToken, refreshToken, profile, done) {
-    console.log(accessToken);
-    console.log(refreshToken);
-    console.log(profile);
-    // console.log(don);
-  }
+    callbackURL: "http://localhost:3001/auth/facebook/callback"
+},
+    function (accessToken, refreshToken, profile, done) {
+
+        user.findOne({ FBID: profile.id }).then(function (results, err) {
+            if (err) { return done(err); };
+
+            if (!results) {
+                // If there are no results, authentication failure.
+                return done(null, false, { message: "Facebook login not found" });
+            } else {
+                return done(null, { loggedIn: true, user: results });
+            }
+        });
+
+        console.log(accessToken);
+        console.log(refreshToken);
+        console.log(profile);
+    }
 ));
 
 

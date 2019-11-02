@@ -8,7 +8,11 @@ router.get('/auth/facebook', passport.authenticate('facebook'));
 
 //fb redirect
 router.get('/auth/facebook/callback',
-  passport.authenticate('facebook'));
+  passport.authenticate('facebook'), function (req, res) {
+    req.session.save(function () {
+        res.redirect('http://localhost:3000/home');
+    });
+});
 
 // Log out route
 router.get("/logout", function (req, res) {

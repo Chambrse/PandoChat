@@ -60,7 +60,7 @@ class App extends Component {
                 <Switch location={location} >
                   <Route exact path="/login"
                     render={() => (
-                      <div className='container' style={{ position: 'relative' }}>
+                      <div style={{ position: 'relative' }}>
                         <Login
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState} />
@@ -68,7 +68,7 @@ class App extends Component {
                     )} />
                   <Route exact path="/register"
                     render={() => (
-                      <div className='container' style={{ position: 'relative' }}>
+                      <div style={{ position: 'relative' }}>
                         <Register
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState}

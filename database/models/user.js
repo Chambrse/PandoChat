@@ -12,7 +12,11 @@ const userSchema = new Schema({
     unique: true,
   },
   username: String,
-  password: String
+  password: String,
+  FBID: {
+    type: String,
+    unique: true,
+  }
 });
 
 // Define schema methods

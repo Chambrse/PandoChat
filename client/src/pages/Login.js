@@ -53,10 +53,28 @@ class Login extends Component {
                         <div className='row justify-content-center'>
                             <img alt='chatter logo' src={logo}></img>
                         </div>
-                        <div className='row'>
-                            <div className='col-md-6 col-sm-12 text-center align-middle p-2'>
-                                Welcome to Chatter! The chat room for everyone. To join in the conversation, please sign up.
+                        <div className='row p-2 d-flex justify-content-center text-center align-middle'>
+                            Welcome to Chatter! The chat room for everyone. To join in the conversation, please sign up.
                                 <p>New here? <Link to='/register'>Register</Link></p>
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-6 col-sm-12' style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                                <a href="http://localhost:3001/auth/facebook">
+                                    <button class="loginBtn loginBtn--facebook">
+                                        Login with Facebook
+                                </button>
+                                </a>
+                                Or
+                                <a href="http://localhost:3001/auth/facebook">
+                                    <button class="loginBtn loginBtn--google">
+                                        Login with Google
+                                </button>
+                                </a>
                             </div>
                             <div className='col-md-6 col-sm-12'>
                                 <h2>Log In:</h2>
