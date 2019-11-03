@@ -5,6 +5,8 @@ import '../css/register.css';
 import logo from '../images/Chatter_Logo_Transparent.png';
 import validator from 'validator';
 import axios from 'axios';
+import { withRouter } from "react-router";
+
 
 class Register extends Component {
     constructor() {
@@ -38,11 +40,11 @@ class Register extends Component {
         switch (event.target.name) {
             case 'username':
                 if ((value.length < 5 || value.length > 20)) {
-                     newErrors.push('Username must be between 5 and 20 characters.') 
-                     this.setState({ usernameErrors: ['Username must be between 5 and 20 characters.']});
-                    } else if (this.state.usernameErrors.length > 0) {
-                        this.setState({usernameErrors: []})
-                    };
+                    newErrors.push('Username must be between 5 and 20 characters.')
+                    this.setState({ usernameErrors: ['Username must be between 5 and 20 characters.'] });
+                } else if (this.state.usernameErrors.length > 0) {
+                    this.setState({ usernameErrors: [] })
+                };
                 break;
             case 'email':
                 if (!validator.isEmail(value)) { newErrors.push('This is not a valid Email.') };
@@ -75,9 +77,15 @@ class Register extends Component {
         event.preventDefault();
     }
 
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        console.log(this.props);
+    }
+
     render() {
         console.log("register render");
-        if (this.props.loggedIn) { return <Redirect to='/home' /> }
+        // if (this.props.loggedIn) { return <Redirect push to='/home' /> }
         return (
             <div className='centeredAbsolute' style={{ position: 'absolute' }}>
                 <div className='row' id='whiteWindow'>
@@ -98,7 +106,7 @@ class Register extends Component {
                                         <label>
                                             Username:
                                     </label>
-                                        <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} autocomplete="off"/>
+                                        <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} autoComplete="off" />
                                         {this.state.usernameErrors.length > 0 ? (
                                             this.state.usernameErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
@@ -124,7 +132,7 @@ class Register extends Component {
                                         <label>
                                             Password:
                                     </label>
-                                        <input type="password" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} autocomplete="off"/>
+                                        <input type="password" name='password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} autoComplete="off" />
                                         {this.state.passwordErrors.length > 0 ? (
                                             this.state.passwordErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
@@ -137,7 +145,7 @@ class Register extends Component {
                                         <label>
                                             Re-enter Password:
                                     </label>
-                                        <input type="password" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} autocomplete="off"/>
+                                        <input type="password" name='passwordMatch' className={`form-control ${this.state.passwordMatchErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.passwordMatch} onChange={this.handleChange} autoComplete="off" />
                                         {this.state.passwordMatchErrors.length > 0 ? (
                                             this.state.passwordMatchErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
@@ -160,4 +168,4 @@ class Register extends Component {
     }
 }
 
-export default Register;
+export default withRouter(Register);
