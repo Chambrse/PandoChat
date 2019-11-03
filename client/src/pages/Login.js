@@ -3,6 +3,8 @@ import { Redirect, Link } from 'react-router-dom';
 import logo from '../images/Chatter_Logo_Transparent.png';
 import axios from 'axios';
 import "../css/login.css"
+import { withRouter } from "react-router";
+
 
 
 class Login extends Component {
@@ -29,23 +31,30 @@ class Login extends Component {
     };
 
     handleSubmit(event) {
+        event.preventDefault();
         axios.post('/login', this.state).then(response => {
             this.setState(response.data);
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
+                this.props.history.push("/home");
             }
 
         }).catch(err => {
             console.log(err);
             this.setState({ authError: true })
         });
-        event.preventDefault();
     }
+
+
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps.location);
+    //     console.log(this.props.location);
+    // }
 
     render() {
         console.log("login render");
-        if (this.props.loggedIn) { return <Redirect to='/home' /> }
+        // if (this.props.loggedIn) { return <Redirect push to='/home' /> }
         return (
             <div className='centeredAbsolute' style={{ position: "absolute" }}>
                 <div className='row' id='whiteWindow'>
@@ -107,4 +116,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);
