@@ -7,6 +7,8 @@ import Message from '../components/Message';
 import axios from "axios";
 import ReactDOM from 'react-dom';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { withRouter } from "react-router";
+
 
 class Home extends Component {
     constructor() {
@@ -16,7 +18,7 @@ class Home extends Component {
             messages: [],
             messageSizer: null,
             messageSizerBoolean: false,
-            messagesInCarts: [{ messages: [], index: 0}, { messages: [], index: 1}, { messages: [], index: 2}, { messages: [], index: 3}],
+            messagesInCarts: [{ messages: [], index: 0 }, { messages: [], index: 1 }, { messages: [], index: 2 }, { messages: [], index: 3 }],
             messageInput: '',
             currentCartIndex: 0,
             currentCartHeight: 0,
@@ -195,17 +197,17 @@ class Home extends Component {
             let currentCartObject = arrayToSplice[currentCartIndex];
             let currentCart = arrayToSplice[currentCartIndex].messages;
             currentCart.push({ id: message.id, username: message.username, msg: message.msg });
-            arrayToSplice.splice(currentCartIndex, 1, { messages: currentCart, index: currentCartObject.index});
+            arrayToSplice.splice(currentCartIndex, 1, { messages: currentCart, index: currentCartObject.index });
             updateStateObj.messagesInCarts = arrayToSplice;
 
             let moreCarts;
 
             if (pastHalf && !nextCartExists) {
                 let indexOfLastExistingCart = updateStateObj.messagesInCarts[updateStateObj.messagesInCarts.length - 1].index
-                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts, 
-                    {messages: [], index: indexOfLastExistingCart + 1},
-                    {messages: [], index: indexOfLastExistingCart + 2},
-                    {messages: [], index: indexOfLastExistingCart + 3}];
+                updateStateObj.messagesInCarts = [...updateStateObj.messagesInCarts,
+                { messages: [], index: indexOfLastExistingCart + 1 },
+                { messages: [], index: indexOfLastExistingCart + 2 },
+                { messages: [], index: indexOfLastExistingCart + 3 }];
                 moreCarts = true;
             }
 
@@ -235,6 +237,7 @@ class Home extends Component {
         console.log('logout running')
         axios.get('/logout').then(response => {
             this.props.updateAppState(response.data);
+            this.props.history.push("/login");
         });
     }
 
@@ -262,10 +265,16 @@ class Home extends Component {
         this.messageInputDiv.focus();
     }
 
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.location);
+        console.log(this.props.location);
+    }
+
     render() {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
-        if (!this.props.loggedIn) { return <Redirect to='/login'></Redirect> }
+        // if (!this.props.loggedIn) { return <Redirect push to='/login'></Redirect> }
 
         return (
             <div id='chatWindow' style={{ position: 'absolute' }}>
@@ -366,4 +375,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default withRouter(Home);

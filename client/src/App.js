@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Loading from './pages/Loading';
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, withRouter } from "react-router-dom";
 import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -47,7 +47,7 @@ class App extends Component {
     console.log("app render");
     if (this.state.loading === 'initial') { return <Loading /> }
     return (
-      <Router>
+      <Router >
         <Route
           render={({ location }) => (
             <TransitionGroup>
@@ -62,6 +62,7 @@ class App extends Component {
                     render={() => (
                       <div style={{ position: 'relative' }}>
                         <Login
+                          location={location}
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState} />
                       </div>
@@ -70,6 +71,7 @@ class App extends Component {
                     render={() => (
                       <div style={{ position: 'relative' }}>
                         <Register
+                          location={location}
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState}
                         />
@@ -79,13 +81,14 @@ class App extends Component {
                     render={() => (
                       <div style={{ position: 'relative' }}>
                         <Home
+                          location={location}
                           loggedIn={this.state.loggedIn}
                           updateAppState={this.updateAppState}
                           user={this.state.user}
                         />
                       </div>
                     )} />
-                  <Route path="/" render={() => <Redirect to="/home" />} />
+                  {/* <Route path="/" render={() => <Redirect to="/home" />} /> */}
                   <Route render={() => <div>Not Found</div>} />
                 </Switch>
               </CSSTransition>
