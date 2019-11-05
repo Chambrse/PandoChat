@@ -88,7 +88,7 @@ class App extends Component {
                         />
                       </div>
                     )} />
-                  {/* <Route path="/" render={() => <Redirect to="/home" />} /> */}
+                  <Route path="/" render={() => <Redirect to="/home" />} />
                   <Route render={() => <div>Not Found</div>} />
                 </Switch>
               </CSSTransition>
