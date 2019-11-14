@@ -72,6 +72,7 @@ class Register extends Component {
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
+                this.props.history.push("/ChooseProperties");
             }
         });
         event.preventDefault();

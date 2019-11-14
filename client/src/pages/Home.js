@@ -46,6 +46,12 @@ class Home extends Component {
         this.scrollToBottom = this.scrollToBottom.bind(this);
     };
 
+    // componentWillMount() {
+    //     if(!this.props.loggedIn) {
+    //         this.props.history.push("/login");
+    //     }
+    // }
+
     componentDidMount() {
         // If you're logged in, initialize the socket, and keydown event listener.
         if (this.props.loggedIn) {
@@ -54,7 +60,6 @@ class Home extends Component {
             document.addEventListener("keydown", this.handleKeydown, false);
             // this.socket.on("chat-message", this.addMessage);
             this.socket.on("chat-message", this.addMessage2);
-
         }
     }
 
@@ -274,7 +279,7 @@ class Home extends Component {
     render() {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
-        // if (!this.props.loggedIn) { return <Redirect push to='/login'></Redirect> }
+        if (!this.props.loggedIn) { return <Redirect push to='/login'></Redirect> }
 
         return (
             <div id='chatWindow' style={{ position: 'absolute' }}>

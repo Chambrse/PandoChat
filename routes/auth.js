@@ -98,6 +98,8 @@ router.post("/register", function (req, res) {
 
         }).catch(function (err) {
 
+            if (err) throw err;
+
             res.send({ emailErrors: ['This email is already associated with an account.'] });
 
         });
