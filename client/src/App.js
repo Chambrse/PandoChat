@@ -5,7 +5,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Loading from './pages/Loading';
 import ChooseProperties from './pages/ChooseProperties';
-import { BrowserRouter as Router, Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
@@ -37,15 +37,20 @@ class App extends Component {
 
   componentWillMount() {
     this.getUser();
+    console.log("Welcome to Pando.Chat!")
   }
 
-  updateAppState(data) {
-    console.log("app state being updated");
-    this.setState(data);
+  updateAppState(data, cb) {
+    // console.log("app state being updated");
+    this.setState(data, () =>{
+      if(cb){
+        cb();
+      };
+    });
   }
 
   render() {
-    console.log("app render");
+    // console.log("app render");
     if (this.state.loading === 'initial') { return <Loading /> }
     return (
       <Router >
@@ -100,7 +105,7 @@ class App extends Component {
                         />
                       </div>
                     )} />
-                  <Route path="/" render={() => <Redirect to="/home" />} />
+                  <Route exact path="/" render={() => <Redirect to="/home" />} />
                   <Route render={() => <div>Not Found</div>} />
                 </Switch>
               </CSSTransition>

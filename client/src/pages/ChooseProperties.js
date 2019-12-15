@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 import '../css/register.css';
 import logo from '../images/Chatter_Logo_Transparent.png';
-import validator from 'validator';
 import axios from 'axios';
 import { withRouter } from "react-router";
 import { SketchPicker } from 'react-color';
@@ -16,7 +13,29 @@ class ChooseProperties extends Component {
         super();
 
         this.state = {
-            color: "#000",
+            color: {
+                "hsl": {
+                    "h": 264.935064935065,
+                    "s": 0.7333,
+                    "l": 0.4117,
+                    "a": 0.5
+                },
+                "hex": "#5c1cb6",
+                "rgb": {
+                    "r": 92,
+                    "g": 28,
+                    "b": 182,
+                    "a": 1
+                },
+                "hsv": {
+                    "h": 264.935064935065,
+                    "s": 0.846131656378007,
+                    "v": 0.71359961,
+                    "a": 0.5
+                },
+                "oldHue": 264.935064935065,
+                "source": "rgb"
+            },
             alias: undefined,
             shadow: '4px 4px 2px'
         }
@@ -64,23 +83,24 @@ class ChooseProperties extends Component {
     }
 
     handleSubmit(event) {
-        // axios.post('/register', this.state).then(response => {
-        //     console.log(response.data);
-        //     this.setState(response.data);
+        axios.put('user', { color: this.state.color }).then(response => {
+            // console.log(response);
+            this.props.updateAppState({
+                user: response.data.user
+            }, () => {
+                this.props.history.push("/home");
+            });
+        })
 
-        //     if (response.data.loggedIn) {
-        //         this.props.updateAppState(response.data);
-        //     }
-        // });
-        // event.preventDefault();
+        event.preventDefault();
     }
 
     // messageClick() {
 
     // }
 
-    onColorChange(color){
-        this.setState({color: color.hex})
+    onColorChange(color) {
+        this.setState({ color: color })
     }
 
     render() {
@@ -89,34 +109,36 @@ class ChooseProperties extends Component {
         return (
             <div className='centeredAbsolute' style={{ position: 'absolute' }}>
                 <div className='row' id='whiteWindow'>
-                    <div className='col'>
+                    <div className='col p-5'>
                         <div className='row justify-content-center'>
                             <img alt='chatter logo' src={logo}></img>
                         </div>
                         <div className='row justify-content-center'>
                             Message Preview:
                         </div>
+                        <br></br>
                         <div className='row justify-content-center'>
-                        <Message onClick={this.messageClick}
-                                        color={this.state.color}
-                                        classNames={'test'}
-                                        username={this.state.alias || this.props.user.username}
-                                        msg={"This is what your messages will look like."}
-                                    />
+                            <Message onClick={this.messageClick}
+                                classNames={'test'}
+                                username={this.props.user.username}
+                                msg={"This is what your messages will look like."}
+                                animation={'slidein .25s ease'}
+                                user={{ username: this.props.user.username, color: this.state.color }}
+                            />
                         </div>
                         <br></br>
                         <div className='row d-flex justify-content-center'>
-                                <form onSubmit={this.handleSubmit}>
-                                    <div className='form-group'>
-                                        <label>
-                                            Choose a color:
-                                    </label>
+                            <form onSubmit={this.handleSubmit}>
+                                <div className='form-group'>
+                                    <div className='row justify-content-center'>
+                                        Choose a Color:
+                        </div>
                                     <SketchPicker
-                                        color={ this.state.color }
+                                        color={this.state.color.hex}
                                         onChange={this.onColorChange}
-                                        // onChangeComplete={ this.handleChangeComplete }
-                                        />
-                                        {/* <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} autoComplete="off" />
+                                    // onChangeComplete={ this.handleChangeComplete }
+                                    />
+                                    {/* <input type="text" name='username' className={`form-control ${this.state.usernameErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.username} onChange={this.handleChange} autoComplete="off" />
                                         {this.state.usernameErrors.length > 0 ? (
                                             this.state.usernameErrors.map((element, index) => (
                                                 <p key={index} className='errorClass'>
@@ -124,19 +146,12 @@ class ChooseProperties extends Component {
                                                 </p>
                                             ))
                                         ) : null} */}
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>
-                                            Alias:
-                                    </label>
-                                    <br></br>
-                                        <input type="text" name='alias' value={this.state.alias} onChange={this.handleChange} />
-                                    </div>
-                                    <br></br>
-                                    <div className='form-group'>
-                                        <input className='form-control btn btn-secondary' type="submit" value="Submit" />
-                                    </div>
-                                </form>
+                                </div>
+                                <br></br>
+                                <div className='form-group'>
+                                    <input className='form-control btn btn-secondary' type="submit" value="Submit" />
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

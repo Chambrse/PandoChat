@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../images/Chatter_Logo_Transparent.png';
 import axios from 'axios';
 import "../css/login.css"
@@ -32,17 +32,19 @@ class Login extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        axios.post('/login', this.state).then(response => {
-            this.setState(response.data);
-
-            if (response.data.loggedIn) {
-                this.props.updateAppState(response.data);
-                this.props.history.push("/home");
-            }
-
-        }).catch(err => {
-            console.log(err);
-            this.setState({ authError: true })
+        this.setState({authError: false}, () => {
+            axios.post('/login', this.state).then(response => {
+                this.setState(response.data);
+    
+                if (response.data.loggedIn) {
+                    this.props.updateAppState(response.data);
+                    this.props.history.push("/home");
+                }
+    
+            }).catch(err => {
+                console.log(err);
+                this.setState({ authError: true })
+            });
         });
     }
 
@@ -53,7 +55,7 @@ class Login extends Component {
     // }
 
     render() {
-        console.log("login render");
+        // console.log("login render");
         // if (this.props.loggedIn) { return <Redirect push to='/home' /> }
         return (
             <div className='centeredAbsolute' style={{ position: "absolute" }}>

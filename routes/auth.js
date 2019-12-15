@@ -88,7 +88,7 @@ router.post("/register", function (req, res) {
             password: req.body.password
         }).then(function (data) {
 
-            req.login({ user: { user_id: data._id, username: data.username } }, function (err) {
+            req.login({ user: { _id: data._id, username: data.username } }, function (err) {
 
                 if (err) throw err;
 
@@ -98,7 +98,8 @@ router.post("/register", function (req, res) {
 
         }).catch(function (err) {
 
-            if (err) throw err;
+            if (err) 
+            {console.log(err)};
 
             res.send({ emailErrors: ['This email is already associated with an account.'] });
 

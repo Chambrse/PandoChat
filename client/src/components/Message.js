@@ -5,36 +5,60 @@ class Message extends React.Component {
     constructor(props) { //<----Method
         super(props);
         this.state = { //<----Initialize state
-            shadow: '2px 2px 1px'
+            shadow: '2px 2px 1px',
+            hovered: false
         };
         //   this.handleChange = this.handleChange.bind(this);
           this.onMouseLeave = this.onMouseLeave.bind(this);
           this.onMouseEnter = this.onMouseEnter.bind(this);
     }
 
+    // componentWillMount() {
+    //     console.log("message being re rendered");
+    // }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return (this.props !== nextProps || this.state.hovered !== nextState.hovered);
+    }
+
+    componentWillReceiveProps(props) {
+        if (!props.selected) {
+            this.setState({shadow: '2px 2px 1px'});
+        } else {
+            this.setState({shadow: '4px 4px 2px'});
+        }
+    }
+
     onMouseLeave() {
-        this.setState({shadow: '2px 2px 1px'});
+        if (!this.props.selected) {
+            this.setState({shadow: '2px 2px 1px', hovered: false});
+        };
     };
 
     onMouseEnter() {
-        this.setState({shadow: '4px 4px 2px'});
+        this.setState({shadow: '4px 4px 2px', hovered: true});
     };
 
     render() {  //<-----Method/Return JSX/HTML
-        const { id, msg, animation, width, username, classNames, onClick, display, color, shadow } = this.props;
+        const { id, msg, animation, username, user, classNames, onClick, display, thread } = this.props;
+
+        // let thisColor = color === undefined ? "#999999" : color;
         return (
-            <div className={`messages p-1 ${classNames}`}
-                onClick={() => onClick(id)}
-                onMouseLeave={this.onMouseLeave}
-                onMouseEnter={this.onMouseEnter}
-                style={{
-                    zIndex: id,
-                    position: 'relative',
-                    display: display,
-                    animation: animation,
-                    borderColor: color,
-                    boxShadow: this.state.shadow + color
-                }}>{`[${username}]: ${msg}`}</div>
+                <div className={`messages p-1 ${classNames}`}
+                    onClick={() => onClick(id)}
+                    onMouseLeave={this.onMouseLeave}
+                    onMouseEnter={this.onMouseEnter}
+                    style={{
+                        zIndex: id,
+                        backgroundColor: thread ? `hsl(${thread.color.hsl.h},${thread.color.hsl.s * 100}%,50%)` : null,
+                        position: 'relative',
+                        display: display,
+                        animation: animation,
+                        // borderWidth: thread ? '3px' : '1px',
+                        // borderBlockWidth: thread ? '3px' : '1px',
+                        borderColor: user.color.hex || null,
+                        boxShadow: this.state.shadow + ` rgba(${user.color.rgb.r},${user.color.rgb.g},${user.color.rgb.b})`
+                    }}>{`[${username}]: ${msg}`}</div>
         );
     }
 }
