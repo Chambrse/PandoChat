@@ -12,7 +12,10 @@ const userSchema = new Schema({
     unique: true,
   },
   username: String,
-  password: String
+  password: String,
+  color: Object,
+  alias: String,
+  type: String
 });
 
 // Define schema methods

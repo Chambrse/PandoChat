@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/register.css';
 import logo from '../images/Chatter_Logo_Transparent.png';
@@ -72,19 +71,20 @@ class Register extends Component {
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
+                this.props.history.push("/ChooseProperties");
             }
         });
         event.preventDefault();
     }
 
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        console.log(this.props);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps);
+    //     console.log(this.props);
+    // }
 
     render() {
-        console.log("register render");
+        // console.log("register render");
         // if (this.props.loggedIn) { return <Redirect push to='/home' /> }
         return (
             <div className='centeredAbsolute' style={{ position: 'absolute' }}>

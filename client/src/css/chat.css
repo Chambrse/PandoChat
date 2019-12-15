@@ -10,8 +10,8 @@
     height: 100vh;
     line-height: 110%;
     /* font-family: 'Medula One', cursive; */
-    /* font-family: 'Francois One', sans-serif; */
-    font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Francois One', sans-serif;
+    /* font-family: 'Open Sans Condensed', sans-serif; */
     font-weight: 500;
     display: flex;
     flex-direction: column;
@@ -60,7 +60,7 @@
     align-items: flex-start;
     /* flex-basis: auto; */
     /* left: 50px; */
-    width: -webkit-fill-available;
+    width: stretch;
     position: relative;
     /* -webkit-transition: all 1s 0s ease-in-out;
     -moz-transition: all 1s 0s ease-in-out;
@@ -88,14 +88,15 @@
     border: 1px black solid;
     border-radius: 5px;
     margin: 0;
-    box-shadow: 2px 2px 1px grey;
+    /* box-shadow: 2px 2px 1px grey; */
     word-wrap: break-word;
     /* position: relative; */
     background-color: white;
+    box-sizing: border-box;
 }
 
 .selectedMessage {
-    /* background-color: grey; */
+    background-color: grey;
     top: -2px;
     left: -2px;
     z-index: 1000;
@@ -107,7 +108,7 @@
     top: -2px;
     left: -2px;
     z-index: 1000;
-    box-shadow: 4px 4px 2px grey;
+    /* box-shadow: 4px 4px 2px grey; */
     transition: cubic-bezier(0.445, 0.05, 0.55, 0.95);
     cursor:pointer;
 }

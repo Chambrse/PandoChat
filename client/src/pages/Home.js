@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import logo from '../images/Chatter_Logo_Transparent.png';
 import '../css/chat.css';
-import { Redirect } from 'react-router-dom';
 import io from 'socket.io-client';
 import Message from '../components/Message';
 import axios from "axios";
-import ReactDOM from 'react-dom';
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { withRouter } from "react-router";
 
 
@@ -46,26 +43,38 @@ class Home extends Component {
         this.scrollToBottom = this.scrollToBottom.bind(this);
     };
 
+    componentWillMount() {
+        if (!this.props.loggedIn) {
+            this.props.history.push("/login");
+        }
+    }
+
     componentDidMount() {
         // If you're logged in, initialize the socket, and keydown event listener.
         if (this.props.loggedIn) {
-            console.log('socket initialize');
+            // console.log('socket initialize');
             this.socket = io(window.location.host);
             document.addEventListener("keydown", this.handleKeydown, false);
             // this.socket.on("chat-message", this.addMessage);
             this.socket.on("chat-message", this.addMessage2);
+        }
+    }
 
+    componentWillUnmount() {
+        // console.log("home unmount")
+        // window.removeEventListener('scroll', this.onScroll.bind(this), false);
+        document.removeEventListener("keydown", this.handleKeydown, false);
+        if (this.socket) {
+            this.socket.off(null);
         }
     }
 
     handleKeydown(event) {
         let { user } = this.props;
 
-        console.log("keycode", event.keyCode);
-
         // On enter, emit the message.
-        if (event.keyCode === 13 && this.props.loggedIn) {
-            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username, id: this.state.latestMessageId, replyTo: this.state.selectedMessageId });
+        if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
+            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username, user: { username: user.username, color: user.color }, replyTo: this.state.selectedMessage });
             this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
         }
 
@@ -137,8 +146,8 @@ class Home extends Component {
 
     addMessage2(message) {
         this.setState({
-            messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg }],
-            messageSizer: { id: message.id, username: message.username, msg: message.msg }
+            messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg, user: message.user, objectId: message.objectId, thread: message.thread }],
+            messageSizer: { id: message.id, username: message.username, user: message.user, msg: message.msg, color: message.color, thread: message.thread }
         }, () => {
             let updateStateObj = {};
 
@@ -154,10 +163,10 @@ class Home extends Component {
 
             let chatFrameHeight = this.chatFrame.clientHeight;
 
-            console.log(this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length));
-            console.log(this.state.messagesInCarts);
-            console.log(this.state.currentCartIndex);
-            console.log(this.state.messagesInCarts.length - this.state.numberOfCartsToShow)
+            // console.log(this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length));
+            // console.log(this.state.messagesInCarts);
+            // console.log(this.state.currentCartIndex);
+            // console.log(this.state.messagesInCarts.length - this.state.numberOfCartsToShow)
             let chatCartHeight = this['chatCart_' + this.state.currentCartIndex].clientHeight;
 
             // console.log("messageHeight", messageHeight);
@@ -166,7 +175,7 @@ class Home extends Component {
 
             let messageTooBig = (chatCartHeight + messageHeight) >= (chatFrameHeight);
             let pastHalf = (chatCartHeight + messageHeight) >= (chatFrameHeight / 2);
-            let nextCartExists = this.state.messagesInCarts[this.state.currentCartIndex + 1] != undefined;
+            let nextCartExists = this.state.messagesInCarts[this.state.currentCartIndex + 1] !== undefined;
 
             // // if The next cart does not exist
             // if (!this.state.messagesInCarts[currentCartIndex]) {
@@ -181,7 +190,7 @@ class Home extends Component {
             let currentCartIndex;
 
             if (messageTooBig) {
-                console.log("iterating cart")
+                // console.log("iterating cart")
                 // iterate the cart that messages are being added to
                 currentCartIndex = this.state.currentCartIndex + 1
                 updateStateObj.currentCartIndex = currentCartIndex;
@@ -196,8 +205,27 @@ class Home extends Component {
             let arrayToSplice = updateStateObj.messagesInCarts;
             let currentCartObject = arrayToSplice[currentCartIndex];
             let currentCart = arrayToSplice[currentCartIndex].messages;
-            currentCart.push({ id: message.id, username: message.username, msg: message.msg });
+            currentCart.push({ id: message.id, username: message.username, msg: message.msg, user: message.user, thread: message.thread });
             arrayToSplice.splice(currentCartIndex, 1, { messages: currentCart, index: currentCartObject.index });
+
+
+            if (message.newThread) {
+                let arrayWithReplyToIndex = arrayToSplice.findIndex((cart) => {
+                    let thisMessageToUpdateIndex = cart.messages.findIndex((messageInCart) => {
+                        // console.log(messageInCart.id, message.replyToId);
+                        return messageInCart.id === message.replyToId;
+                    });
+                    if (thisMessageToUpdateIndex !== -1) {
+                        return true
+                    } else {
+                        return false
+                    }
+                });
+
+                arrayToSplice[arrayWithReplyToIndex].messages[arrayToSplice[arrayWithReplyToIndex].messages.findIndex((messageInCart) => { return messageInCart.id === message.replyToId; })].thread = message.thread;
+
+            }
+
             updateStateObj.messagesInCarts = arrayToSplice;
 
             let moreCarts;
@@ -215,8 +243,7 @@ class Home extends Component {
 
             // Make all of the required state changes at once.
             this.setState(updateStateObj, () => {
-                let isNotScrolled = (this.state.scrolledCartIndex == this.state.messagesInCarts.length - (this.state.numberOfColumns + (this.state.numberOfColumns - 1)));
-                console.log("notScrolled", isNotScrolled);
+                let isNotScrolled = (this.state.scrolledCartIndex === this.state.messagesInCarts.length - (this.state.numberOfColumns + (this.state.numberOfColumns - 1)));
                 if (this.state.selectedMessage == null && moreCarts && isNotScrolled) {
                     this.scrollToBottom();
                 }
@@ -266,35 +293,33 @@ class Home extends Component {
     }
 
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps.location);
-        console.log(this.props.location);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps.location);
+    //     console.log(this.props.location);
+    // }
 
     render() {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
-        // if (!this.props.loggedIn) { return <Redirect push to='/login'></Redirect> }
-
-        return (
-            <div id='chatWindow' style={{ position: 'absolute' }}>
-                <div className='row p-1'>
-                    <div className='col'>
-                        <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
-                        <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
+            return (
+                <div id='chatWindow' style={{ position: 'absolute' }}>
+                    <div className='row p-1'>
+                        <div className='col'>
+                            <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
+                            <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
+                        </div>
+                        <div className='col text-center'>
+                            <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br><br></br>
+                            <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
+                            <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
+                        </div>
                     </div>
-                    <div className='col text-center'>
-                        <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br><br></br>
-                        <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
-                        <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
+                    <div className='row'>
+                        <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                     </div>
-                </div>
-                <div className='row'>
-                    <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
-                </div>
-                <div className='p-1 row' id='holder'>
-                    <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
-                        {/* <div id='messageSizer'>
+                    <div className='p-1 row' id='holder'>
+                        <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
+                            {/* <div id='messageSizer'>
                             {this.state.messages.map((m, index) => (
                                 <div ref={(div) => { this['message_Sizer_' + m.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
                                     <Message onClick={this.messageClick}
@@ -307,41 +332,45 @@ class Home extends Component {
                                 </div>
                             ))}
                         </div> */}
-                        {this.state.messageSizer ? (
-                            <div id='messageSizer'>
-                                <div ref={(div) => { this['message_Sizer_' + this.state.messageSizer.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
-                                    <Message onClick={this.messageClick}
-                                        classNames={this.state.messageSizer.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
-                                        key={this.state.messageSizer.id}
-                                        id={this.state.messageSizer.id}
-                                        username={this.state.messageSizer.username}
-                                        msg={this.state.messageSizer.msg}
-                                    />
-                                </div>
-                            </div>
-                        ) : null}
-                    </div>
-                    <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
-                        {this.state.messagesInCarts.length > 0 ? (
-                            this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
-                                <div key={n.index} cartId={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                    {n.messages.map((m, index2) => (
+                            {this.state.messageSizer ? (
+                                <div id='messageSizer'>
+                                    <div ref={(div) => { this['message_Sizer_' + this.state.messageSizer.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
                                         <Message onClick={this.messageClick}
-                                            classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
-                                            // width={(1 / this.state.numberOfColumns) * 100}
-                                            key={m.id}
-                                            id={m.id}
-                                            username={m.username}
-                                            msg={m.msg}
-                                            animation={'slidein .25s ease'}
-                                            display={n.index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
-                                    ))}
+                                            classNames={this.state.messageSizer.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
+                                            key={this.state.messageSizer.id}
+                                            id={this.state.messageSizer.id}
+                                            username={this.state.messageSizer.username}
+                                            user={this.state.messageSizer.user}
+                                            msg={this.state.messageSizer.msg}
+                                            color={this.state.messageSizer.color}
+                                        />
+                                    </div>
                                 </div>
-                            ))
-                        ) : null}
+                            ) : null}
+                        </div>
+                        <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
+                            {this.state.messagesInCarts.length > 0 ? (
+                                this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
+                                    <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
+                                        {n.messages.map((m, index2) => (
+                                            <Message onClick={this.messageClick}
+                                                classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
+                                                thread={m.thread}
+                                                selected={m.id === this.state.selectedMessageId ? true : false}
+                                                key={m.id}
+                                                id={m.id}
+                                                username={m.username}
+                                                user={m.user}
+                                                msg={m.msg}
+                                                animation={'slidein .25s ease'}
+                                                display={n.index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
+                                        ))}
+                                    </div>
+                                ))
+                            ) : null}
+                        </div>
                     </div>
-                </div>
-                {/* <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
+                    {/* <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
                     <div className="col-3" id="messageSizeTester" ref={(div) => this.messageSizerDiv = div} style={{ position: 'fixed', zIndex: '-500', backgroundColor: 'blue' }}>
                         {this.state.messageSizerBoolean ? (
                             <Message key={this.state.messageSizer.id} id={this.state.messageSizer.id} username={this.state.messageSizer.username} msg={this.state.messageSizer.msg} />
@@ -370,8 +399,9 @@ class Home extends Component {
                         ))
                     ) : null}
                 </div> */}
-            </div>
-        )
+                </div>
+            )
+
     }
 }
 

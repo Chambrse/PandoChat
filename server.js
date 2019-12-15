@@ -46,6 +46,7 @@ io.use(sharedsession(session({ secret: "keyboard cat", resave: false, store: new
 // Routes
 var authRoutes = require('./routes/auth.js');
 app.use('/', authRoutes);
+app.use('/', require('./routes/userRoutes'));
 
 // Passport strategies
 passport.use(new LocalStrategy({
