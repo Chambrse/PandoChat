@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import Message from '../components/Message';
 import axios from "axios";
 import { withRouter } from "react-router";
+import { Link } from 'react-router-dom';
 
 
 class Home extends Component {
@@ -44,20 +45,20 @@ class Home extends Component {
     };
 
     componentWillMount() {
-        if (!this.props.loggedIn) {
-            this.props.history.push("/login");
-        }
+        // if (!this.props.loggedIn) {
+        //     this.props.history.push("/login");
+        // }
     }
 
     componentDidMount() {
         // If you're logged in, initialize the socket, and keydown event listener.
-        if (this.props.loggedIn) {
-            // console.log('socket initialize');
-            this.socket = io(window.location.host);
-            document.addEventListener("keydown", this.handleKeydown, false);
-            // this.socket.on("chat-message", this.addMessage);
-            this.socket.on("chat-message", this.addMessage2);
-        }
+        // if (this.props.loggedIn) {
+        // console.log('socket initialize');
+        this.socket = io(window.location.host);
+        document.addEventListener("keydown", this.handleKeydown, false);
+        // this.socket.on("chat-message", this.addMessage);
+        this.socket.on("chat-message", this.addMessage2);
+        // }
     }
 
     componentWillUnmount() {
@@ -261,10 +262,10 @@ class Home extends Component {
 
     // Log out
     logOut() {
-        console.log('logout running')
+        // console.log('logout running')
         axios.get('/logout').then(response => {
             this.props.updateAppState(response.data);
-            this.props.history.push("/login");
+            // this.props.history.push("/login");
         });
     }
 
@@ -301,106 +302,77 @@ class Home extends Component {
     render() {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
-            return (
-                <div id='chatWindow' style={{ position: 'absolute' }}>
-                    <div className='row p-1'>
-                        <div className='col'>
-                            <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
-                            <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
-                        </div>
-                        <div className='col text-center'>
-                            <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button><br></br><br></br>
-                            <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
-                            <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
-                        </div>
+        return (
+            <div id='chatWindow' style={{ position: 'absolute' }}>
+                <div className='row p-1'>
+                    <div className='col'>
+                        <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
+                        <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
                     </div>
-                    <div className='row'>
-                        <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
-                    </div>
-                    <div className='p-1 row' id='holder'>
-                        <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
-                            {/* <div id='messageSizer'>
-                            {this.state.messages.map((m, index) => (
-                                <div ref={(div) => { this['message_Sizer_' + m.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
-                                    <Message onClick={this.messageClick}
-                                        classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
-                                        key={m.id}
-                                        id={m.id}
-                                        username={m.username}
-                                        msg={m.msg}
-                                    />
-                                </div>
-                            ))}
-                        </div> */}
-                            {this.state.messageSizer ? (
-                                <div id='messageSizer'>
-                                    <div ref={(div) => { this['message_Sizer_' + this.state.messageSizer.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
-                                        <Message onClick={this.messageClick}
-                                            classNames={this.state.messageSizer.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
-                                            key={this.state.messageSizer.id}
-                                            id={this.state.messageSizer.id}
-                                            username={this.state.messageSizer.username}
-                                            user={this.state.messageSizer.user}
-                                            msg={this.state.messageSizer.msg}
-                                            color={this.state.messageSizer.color}
-                                        />
-                                    </div>
-                                </div>
-                            ) : null}
-                        </div>
-                        <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
-                            {this.state.messagesInCarts.length > 0 ? (
-                                this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
-                                    <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                        {n.messages.map((m, index2) => (
-                                            <Message onClick={this.messageClick}
-                                                classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
-                                                thread={m.thread}
-                                                selected={m.id === this.state.selectedMessageId ? true : false}
-                                                key={m.id}
-                                                id={m.id}
-                                                username={m.username}
-                                                user={m.user}
-                                                msg={m.msg}
-                                                animation={'slidein .25s ease'}
-                                                display={n.index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
-                                        ))}
-                                    </div>
-                                ))
-                            ) : null}
-                        </div>
-                    </div>
-                    {/* <div className='row p-2 d-flex flex-nowrap' ref={(div) => this.chatSled = div} id='chatSled'>
-                    <div className="col-3" id="messageSizeTester" ref={(div) => this.messageSizerDiv = div} style={{ position: 'fixed', zIndex: '-500', backgroundColor: 'blue' }}>
-                        {this.state.messageSizerBoolean ? (
-                            <Message key={this.state.messageSizer.id} id={this.state.messageSizer.id} username={this.state.messageSizer.username} msg={this.state.messageSizer.msg} />
+                    <div className='col text-center'>
+                        {this.props.loggedIn ? (
+                            <div>
+                                <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
+                            </div>
+                        ) : null}
+                        {this.props.loggedIn && this.props.user.type == "admin" ? (
+                            <div>
+                                <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
+                                <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
+                            </div>
                         ) : null}
                     </div>
-                    {this.state.messagesInCarts.length > 0 ? (
-                        this.state.messagesInCarts.map((n, index) => (
-                            // <div id="scrollbarHider">
-                            <div key={index} cartId={index} ref={(div) => { this['chatCart_' + index] = div }} style={{ position: 'relative', display: index < this.state.currentCartIndex - this.state.numberOfCartsToShow ? "none" : "" }} className='col-3 chatCart'>
-                                <TransitionGroup>
-                                    {n.map((m, index) => (
-                                        <CSSTransition
-                                            in={true}
-                                            enter={true}
-                                            timeout={1000}
-                                            key={m.id}
-                                            classNames="message"
-                                            unmountOnExit
-                                        >
-                                            <Message onClick={this.messageClick} classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'} key={m.id} id={m.id} username={m.username} msg={m.msg} />
-                                        </CSSTransition>
-                                    ))}
-                                </TransitionGroup>
-                            </div>
-                            // </div>
-                        ))
-                    ) : null}
-                </div> */}
                 </div>
-            )
+                <div className='row'>
+                    {this.props.loggedIn ? (
+                        <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
+                    ) :
+                        (
+                            <p><Link to='/login'>Login</Link> or <Link to='/register'>register</Link> to join the conversation.</p>
+                        )}
+                </div>
+                <div className='p-1 row' id='holder'>
+                    <div ref={(div) => this.chatFrame2 = div} className='chatFrame' style={{ position: 'absolute' }}>
+                        {this.state.messageSizer ? (
+                            <div id='messageSizer'>
+                                <div ref={(div) => { this['message_Sizer_' + this.state.messageSizer.id] = div }} style={{ width: `${((1 / this.state.numberOfColumns) * 100)}%` }} >
+                                    <Message onClick={this.messageClick}
+                                        classNames={this.state.messageSizer.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
+                                        key={this.state.messageSizer.id}
+                                        id={this.state.messageSizer.id}
+                                        username={this.state.messageSizer.username}
+                                        user={this.state.messageSizer.user}
+                                        msg={this.state.messageSizer.msg}
+                                        color={this.state.messageSizer.color}
+                                    />
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
+                    <div ref={(div) => this.chatFrame = div} className='chatFrame' style={{ transform: `translate3d(${this.state.left}px,0,0)`, transition: this.state.transitionString }}>
+                        {this.state.messagesInCarts.length > 0 ? (
+                            this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
+                                <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
+                                    {n.messages.map((m, index2) => (
+                                        <Message onClick={this.messageClick}
+                                            classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
+                                            thread={m.thread}
+                                            selected={m.id === this.state.selectedMessageId ? true : false}
+                                            key={m.id}
+                                            id={m.id}
+                                            username={m.username}
+                                            user={m.user}
+                                            msg={m.msg}
+                                            animation={'slidein .25s ease'}
+                                            display={n.index >= this.state.messagesInCarts.length - this.state.numberOfCartsToShow ? "" : "none"} />
+                                    ))}
+                                </div>
+                            ))
+                        ) : null}
+                    </div>
+                </div>
+            </div >
+        )
 
     }
 }
