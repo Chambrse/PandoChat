@@ -63,23 +63,4 @@ class Message extends React.Component {
     }
 }
 
-// const Message = ({ id, msg, animation, width, username, classNames, onClick, display, color, shadow }) => (
-//     <div className={`messages p-1 ${classNames}`}
-//         onClick={() => onClick(id)}
-//         onMouseLeave={() => {
-//             shadow = '2px 2px 1px';
-//         }}
-//         onMouseEnter={() => {
-//             shadow = '4px 4px 2px';
-//         }}
-//         style={{
-//             zIndex: id,
-//             position: 'relative',
-//             display: display,
-//             animation: animation,
-//             borderColor: color,
-//             boxShadow: shadow + color
-//         }}>{`[${username}]: ${msg}`}</div>
-// );
-
 export default Message; 

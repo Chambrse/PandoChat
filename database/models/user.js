@@ -14,7 +14,6 @@ const userSchema = new Schema({
   username: String,
   password: String,
   color: Object,
-  alias: String,
   type: String
 });
 
