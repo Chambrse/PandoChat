@@ -15,7 +15,7 @@ const userSchema = new Schema({
   password: String,
   color: Object,
   type: String
-});
+}, {timestamps: true});
 
 // Define schema methods
 userSchema.methods = {

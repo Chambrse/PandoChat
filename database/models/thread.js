@@ -9,7 +9,7 @@ const threadSchema = new Schema({
     originalMessage: { type : ObjectId, ref: 'message' },
     color: Object,
     messages: [{ type : ObjectId, ref: 'message' }]
-});
+}, {timestamps: true});
 
 const Thread = mongoose.model('Thread', threadSchema);
 module.exports = Thread;

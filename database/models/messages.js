@@ -11,7 +11,7 @@ const messageSchema = new Schema({
   id: Number,
   replyTo: { type : ObjectId, ref: 'Message' },
   thread: { type : ObjectId, ref: 'Thread' }
-});
+}, {timestamps: true});
 
 const Message = mongoose.model('Message', messageSchema);
 module.exports = Message;

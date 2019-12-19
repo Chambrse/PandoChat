@@ -1,5 +1,5 @@
 {
-  "name": "chatterapp",
+  "name": "PandoChat",
   "version": "0.1.0",
   "description": "A comprehensive, easy to use, high volume chat interface.",
   "main": "server.js",
