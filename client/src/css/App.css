@@ -4,6 +4,10 @@ body {
   overflow-x: hidden;
 }
 
+#navbar {
+  background-color: aqua
+}
+
 .centeredAbsolute {
   position: absolute;
   left: 50%;
