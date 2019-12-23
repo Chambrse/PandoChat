@@ -315,7 +315,7 @@ class Home extends Component {
                                 <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
                             </div>
                         ) : null}
-                        {this.props.loggedIn && this.props.user.type == "admin" ? (
+                        {this.props.loggedIn && this.props.user.user.type == "admin" ? (
                             <div>
                                 <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
                                 <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
