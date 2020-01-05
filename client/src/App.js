@@ -29,7 +29,7 @@ class App extends Component {
       if (response.data === 'not authenticated.') {
         console.log('not logged in');
       } else {
-        this.setState(response.data.data);
+        this.setState({ loggedIn: true, user: response.data.data});
       }
       this.setState({ loading: 'done' });
     });

@@ -18,7 +18,7 @@ router.get("/user", function (req, res) {
     if (req.isAuthenticated()) {
         // console.log(JSON.stringify(req.session.passport.user.user.username, null, 3));
         console.log(req.session.passport.user.user.username + " just logged in.");
-        res.send({ data: req.session.passport.user });
+        res.send({loggedIn: true, data: req.session.passport.user });
     } else {
         console.log('User not logged in.')
         res.send('not authenticated.');
