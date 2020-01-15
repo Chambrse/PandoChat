@@ -72,11 +72,13 @@ class Home extends Component {
 
     handleKeydown(event) {
         let { user } = this.props;
+        // console.log(user);
 
         // On enter, emit the message.
         if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
-            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.username, user: { username: user.username, color: user.color }, replyTo: this.state.selectedMessage });
+            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.user.username, user: { username: user.user.username, color: user.user.color }, replyTo: this.state.selectedMessage });
             this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
+            this.scrollToBottom();
         }
 
         //on tab: select most recent message or next most recent message
@@ -223,7 +225,20 @@ class Home extends Component {
                     }
                 });
 
+                // console.log("incoming thread", message.thread);
+                // console.log("messagetoupdate", arrayToSplice[arrayWithReplyToIndex].messages[arrayToSplice[arrayWithReplyToIndex].messages.findIndex((messageInCart) => { return messageInCart.id === message.replyToId; })]);
+
                 arrayToSplice[arrayWithReplyToIndex].messages[arrayToSplice[arrayWithReplyToIndex].messages.findIndex((messageInCart) => { return messageInCart.id === message.replyToId; })].thread = message.thread;
+
+                //update messages array
+                let updatedMessagesArray = this.state.messages;
+                let messageToUpdateIndex = updatedMessagesArray.findIndex((messageFromArray) => {
+                    return messageFromArray.id === message.replyToId
+                });
+                updatedMessagesArray[messageToUpdateIndex].thread = message.thread;
+
+                updateStateObj.messages = updatedMessagesArray;
+
 
             }
 
