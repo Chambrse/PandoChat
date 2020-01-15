@@ -176,9 +176,17 @@ module.exports = function (io) {
             //no matter what, increment the messageID
             messageID++;
 
-            console.log(incomingMessage);
+            // console.log(incomingMessage.replyTo.user.username);
+            // console.log(user.username);
+            // console.log(incomingMessage.replyTo.user.username !== user.username);
+            // console.log(incomingMessage);
             //if this message is a reply
-            if (incomingMessage.replyTo) {
+            if (incomingMessage.replyTo && ((incomingMessage.replyTo.user.username !== user.username) || incomingMessage.replyTo.thread)) {
+                // console.log(incomingMessage.replyTo.user.username);
+                // console.log(user.username);
+                // console.log(incomingMessage.replyTo.user.username !== user.username);
+                console.log(incomingMessage.replyTo);
+                console.log("this is a reply")
                 // if the message that this is a reply to is already part of a thread
                 if (incomingMessage.replyTo.thread !== null) {
                     console.log("continuing thread");
@@ -211,7 +219,7 @@ module.exports = function (io) {
 
                     });
 
-                } else {
+                } else if (incomingMessage.replyTo.user.username !== user.username) {
                     //create new thread
                     console.log("new thread");
 
@@ -252,38 +260,45 @@ module.exports = function (io) {
                         });
                     });
 
+                } else {
+                    
                 }
             } else {
-                console.log("no thread");
+                // console.log("no thread");
 
                 //send normal message
-                message.create({
-                    text: incomingMessage.msg,
-                    username: user.username,
-                    id: messageID,
-                    user: user._id,
-                    color: user.color,
-                    replyTo: null,
-                    thread: null
-                }).then(function (data) {
-
-                    io.sockets.emit("chat-message", {
-                        id: messageID,
-                        objectId: data._id,
-                        username: user.username,
-                        user: user,
-                        msg: incomingMessage.msg,
-                        thread: null
-                    });
-
-                }).catch(function (err) {
-                    if (err) throw err;
-                });
+                sendNormalMessage(incomingMessage, user);
             }
 
 
 
         };
+    }
+
+
+    function sendNormalMessage(incomingMessage, user) {
+        message.create({
+            text: incomingMessage.msg,
+            username: user.username,
+            id: messageID,
+            user: user._id,
+            color: user.color,
+            replyTo: null,
+            thread: null
+        }).then(function (data) {
+
+            io.sockets.emit("chat-message", {
+                id: messageID,
+                objectId: data._id,
+                username: user.username,
+                user: user,
+                msg: incomingMessage.msg,
+                thread: null
+            });
+
+        }).catch(function (err) {
+            if (err) throw err;
+        });
     }
 
 
