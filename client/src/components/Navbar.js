@@ -1,5 +1,6 @@
 
 import React from 'react';
+import fbshare from '../images/Facebook-share-icon.png';
 
 class Navbar extends React.Component {
     constructor(props) { //<----Method
@@ -33,9 +34,11 @@ class Navbar extends React.Component {
                             <a class="nav-link" href="#">Account</a>
                         </li>
                     </ul>
-                    {/* <span class="navbar-text white-text">
-                        Navbar text with an inline element
-    </span> */}
+                    <span class="navbar-text white-text">
+                        <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
+                            <img style={{height: '32px'}}src={fbshare}></img>
+                        </a>
+    </span>
                 </div>
             </nav>
         )
