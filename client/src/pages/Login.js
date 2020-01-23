@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import logo from '../images/Chatter_Logo_Transparent.png';
+import logo from '../images/PandoChat_200x200.png';
 import axios from 'axios';
 import "../css/login.css"
 import { withRouter } from "react-router";

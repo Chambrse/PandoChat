@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import '../css/register.css';
-import logo from '../images/Chatter_Logo_Transparent.png';
+import logo from '../images/PandoChat_200x200.png';
 import validator from 'validator';
 import axios from 'axios';
 import { withRouter } from "react-router";
