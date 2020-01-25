@@ -297,7 +297,7 @@ class Home extends Component {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
         return (
-            <div id='chatWindow' style={{ position: 'absolute' }}>
+            <div id='chatWindow'>
                 <div className='row p-1'>
                     {/* <div className='col'>
                         <img alt='Chatter logo' src={logo} id="chatterLogo"></img>

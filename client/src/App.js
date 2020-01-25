@@ -54,12 +54,16 @@ class App extends Component {
     // console.log("app render");
     if (this.state.loading === 'initial') { return <Loading /> }
     return (
-      <div style={{ className: 'container' }}>
+      <div style={{
+        display: 'flex',
+        flexFlow: 'column',
+        height: '100vh'
+      }}>
         <Navbar/>
-          <Router >
+          <Router>
             <Route
               render={({ location }) => (
-                <TransitionGroup>
+                <TransitionGroup  id='divOutsidePages' style={{ flex: 1 }} >
                   <CSSTransition
                     key={location.key}
                     appear={true}
@@ -88,7 +92,7 @@ class App extends Component {
                         )} />
                       <Route path="/home"
                         render={() => (
-                          <div style={{ position: 'relative' }}>
+                          <div id='homeContainer' style={{ position: 'relative'}}>
                             <Home
                               location={location}
                               loggedIn={this.state.loggedIn}
