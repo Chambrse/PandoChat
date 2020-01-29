@@ -9,6 +9,7 @@ import ChooseProperties from './pages/ChooseProperties';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import About from './pages/About';
 
 class App extends Component {
   constructor() {
@@ -59,11 +60,15 @@ class App extends Component {
         flexFlow: 'column',
         height: '100vh'
       }}>
-        <Navbar/>
-          <Router>
+        <Router>
+          <div style={{ display: 'contents' }}>
+            <Navbar
+              loggedIn={this.state.loggedIn}
+              user={this.state.user}
+              updateAppState={this.updateAppState} />
             <Route
               render={({ location }) => (
-                <TransitionGroup  id='divOutsidePages' style={{ flex: 1 }} >
+                <TransitionGroup id='divOutsidePages' style={{ flex: 1 }} >
                   <CSSTransition
                     key={location.key}
                     appear={true}
@@ -92,7 +97,7 @@ class App extends Component {
                         )} />
                       <Route path="/home"
                         render={() => (
-                          <div id='homeContainer' style={{ position: 'relative'}}>
+                          <div id='homeContainer' style={{ position: 'absolute' }}>
                             <Home
                               location={location}
                               loggedIn={this.state.loggedIn}
@@ -110,6 +115,15 @@ class App extends Component {
                               updateAppState={this.updateAppState}
                               user={this.state.user}
                             />
+                          </div>)} />
+                      <Route path="/about"
+                        render={() => (
+                          <div style={{ position: 'relative' }}>
+                            <About
+                              loggedIn={this.state.loggedIn}
+                              user={this.state.user}
+                              updateAppState={this.updateAppState}
+                            />
                           </div>
                         )} />
                       <Route exact path="/" render={() => <Redirect to="/home" />} />
@@ -118,11 +132,12 @@ class App extends Component {
                   </CSSTransition>
                 </TransitionGroup>
               )} />
-          </Router>
           </div>
-        );
-      }
-    }
-    
-    export default App;
-    
+        </Router>
+      </div>
+    );
+  }
+}
+
+export default App;
+

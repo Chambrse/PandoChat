@@ -22,9 +22,10 @@ class Message extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if (!props.selected) {
-            this.setState({shadow: '2px 2px 1px'});
-        } else {
+        // console.log(props.selected, this.state.hovered);
+        if (!props.selected && !this.state.hovered) {
+            this.setState({shadow: '2px 2px 1px', hovered: false});
+        } else if (props.selected || this.state.hovered) {
             this.setState({shadow: '4px 4px 2px'});
         }
     }
@@ -32,6 +33,8 @@ class Message extends React.Component {
     onMouseLeave() {
         if (!this.props.selected) {
             this.setState({shadow: '2px 2px 1px', hovered: false});
+        } else {
+            this.setState({ hovered: false })
         };
     };
 

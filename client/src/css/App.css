@@ -1,7 +1,19 @@
 body {
   background-image: url(../images/connectwork.png);
-  /* overflow-y: hidden; */
+  overflow-y: hidden;
   overflow-x: hidden;
+}
+
+#loginButton {
+  margin: 0px 15px;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.dropdown-item {
+  cursor: pointer;
 }
 
 #navbar {

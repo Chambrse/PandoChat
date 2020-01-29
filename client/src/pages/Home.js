@@ -260,6 +260,9 @@ class Home extends Component {
         axios.get('/logout').then(response => {
             this.props.updateAppState(response.data);
             // this.props.history.push("/login");
+        }, {timeout: 2000})
+        .catch(()=> {
+            console.log("error logging out");
         });
     }
 

@@ -5,7 +5,7 @@
     margin: 25px;
     /* animation: 0.8s slideInUp ease; */
     width: 98vw;
-    margin: 25px 0px;
+    margin: 25px auto;
     /* margin-bottom: 5px; */
     padding: 25px;
     padding-bottom: 5px;
@@ -14,24 +14,28 @@
     font-family: 'Francois One', sans-serif;
     /* font-family: 'Open Sans Condensed', sans-serif; */
     font-weight: 500;
-    display: flex;
+    display: inline-flex;
     flex: 1;
     flex-flow: column;
-    /* justify-self: center; */
-    /* align-self: center; */
+    justify-self: center;
+    align-self: center;
 }
 
 #divOutsidePages {
-    display: flex;
+    display: inline-flex;
     flex-flow: column;
+    height: 100%;
 }
 
 #homeContainer {
-    display: flex;
+    display: inline-flex;
     flex-flow: column;
     /* justify-content: center; */
     align-items: center;
     flex: 1 1 0%;
+    position: absolute;
+    height: calc(100% - 90px);
+    align-self: center;
 }
 
 
