@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import logo from '../images/Chatter_Logo_Transparent.png';
+import logo from '../images/PandoChat_200x200.png';
+import cartIcon from '../images/leaf-plants-nature-icon-23.png';
 import '../css/chat.css';
 import io from 'socket.io-client';
 import Message from '../components/Message';
@@ -30,12 +31,13 @@ class Home extends Component {
             left: 0,
             numberOfColumns: 4,
             transitionString: 'transform 2s ease-in-out',
-            scrolledCartIndex: 0
+            scrolledCartIndex: 0,
+            chatFrameHeight: null
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
-        this.addMessage2 = this.addMessage2.bind(this);
+        this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
         this.logOut = this.logOut.bind(this);
         this.chatSim = this.chatSim.bind(this);
@@ -44,26 +46,17 @@ class Home extends Component {
         this.scrollToBottom = this.scrollToBottom.bind(this);
     };
 
-    componentWillMount() {
-        // if (!this.props.loggedIn) {
-        //     this.props.history.push("/login");
-        // }
-    }
-
     componentDidMount() {
-        // If you're logged in, initialize the socket, and keydown event listener.
-        // if (this.props.loggedIn) {
-        // console.log('socket initialize');
+        // initialize the socket connection to the server, and listen for messages.
         this.socket = io(window.location.host);
+        this.socket.on("chat-message", this.addMessage);
+
+        // listen for keystrokes.
         document.addEventListener("keydown", this.handleKeydown, false);
-        // this.socket.on("chat-message", this.addMessage);
-        this.socket.on("chat-message", this.addMessage2);
-        // }
     }
 
     componentWillUnmount() {
-        // console.log("home unmount")
-        // window.removeEventListener('scroll', this.onScroll.bind(this), false);
+        //when leaving the home page, stop listening for keystrokes and disconnect the socket from the server.
         document.removeEventListener("keydown", this.handleKeydown, false);
         if (this.socket) {
             this.socket.off(null);
@@ -72,9 +65,9 @@ class Home extends Component {
 
     handleKeydown(event) {
         let { user } = this.props;
-        // console.log(user);
 
         // On enter, emit the message.
+        // If you're logged in and you've typed something into the box
         if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
             this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.user.username, user: { username: user.user.username, color: user.user.color }, replyTo: this.state.selectedMessage });
             this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
@@ -85,7 +78,6 @@ class Home extends Component {
         else if (event.keyCode === 9) {
             event.preventDefault();
             this.messageInputDiv.focus();
-            // this.setState({ left: this.state.left + 50 })
 
             if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
                 let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
@@ -147,7 +139,8 @@ class Home extends Component {
         })
     }
 
-    addMessage2(message) {
+    addMessage(message) {
+        // add the incoming message to the messages and messagesizer state objects
         this.setState({
             messages: [...this.state.messages, { id: message.id, username: message.username, msg: message.msg, user: message.user, objectId: message.objectId, thread: message.thread }],
             messageSizer: { id: message.id, username: message.username, user: message.user, msg: message.msg, color: message.color, thread: message.thread }
@@ -162,33 +155,19 @@ class Home extends Component {
             // update the latest message state variable to this message (for the tab select functionality)
             updateStateObj.latestMessageId = message.id;
 
+            // Get the height of this message
             let messageHeight = this['message_Sizer_' + message.id].clientHeight;
 
+            // Get the height of the window that holds all of the messages.
             let chatFrameHeight = this.chatFrame.clientHeight;
 
-            // console.log(this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length));
-            // console.log(this.state.messagesInCarts);
-            // console.log(this.state.currentCartIndex);
-            // console.log(this.state.messagesInCarts.length - this.state.numberOfCartsToShow)
+            // Get the sum of the heights of all the messages in this cart.
             let chatCartHeight = this['chatCart_' + this.state.currentCartIndex].clientHeight;
 
-            // console.log("messageHeight", messageHeight);
-            // console.log("chat frame height", chatFrameHeight);
-            // console.log("chat cart height", chatCartHeight);
-
-            let messageTooBig = (chatCartHeight + messageHeight) >= (chatFrameHeight);
-            let pastHalf = (chatCartHeight + messageHeight) >= (chatFrameHeight / 2);
-            let nextCartExists = this.state.messagesInCarts[this.state.currentCartIndex + 1] !== undefined;
-
-            // // if The next cart does not exist
-            // if (!this.state.messagesInCarts[currentCartIndex]) {
-            //     // add 3 more carts
-            //     updateStateObj.messagesInCarts = [...this.state.messagesInCarts, [], [], []];
-            //     moreCarts = true;
-
-            // } else {
-            //     updateStateObj.messagesInCarts = this.state.messagesInCarts;
-            // }
+            // Define boolean values for if:
+            let messageTooBig = (chatCartHeight + messageHeight) >= (chatFrameHeight);                      // The next message will clip the bottom of the view
+            let pastHalf = (chatCartHeight + messageHeight) >= (chatFrameHeight / 2);                       // The next message will result in half of the cart being filled
+            let nextCartExists = this.state.messagesInCarts[this.state.currentCartIndex + 1] !== undefined; // The next cart in the array is defined (and probably empty)
 
             let currentCartIndex;
 
@@ -281,6 +260,9 @@ class Home extends Component {
         axios.get('/logout').then(response => {
             this.props.updateAppState(response.data);
             // this.props.history.push("/login");
+        }, {timeout: 2000})
+        .catch(()=> {
+            console.log("error logging out");
         });
     }
 
@@ -318,12 +300,12 @@ class Home extends Component {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
         return (
-            <div id='chatWindow' style={{ position: 'absolute' }}>
+            <div id='chatWindow'>
                 <div className='row p-1'>
-                    <div className='col'>
+                    {/* <div className='col'>
                         <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
                         <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
-                    </div>
+                    </div> */}
                     <div className='col text-center'>
                         {this.props.loggedIn ? (
                             <div>
@@ -368,6 +350,7 @@ class Home extends Component {
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
                                 <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
+                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 2 : 10}} />
                                     {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}

@@ -1,7 +1,23 @@
 body {
   background-image: url(../images/connectwork.png);
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
+}
+
+#loginButton {
+  margin: 0px 15px;
+}
+
+.nav-item {
+  cursor: pointer;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+#navbar {
+  background-color: aqua
 }
 
 .centeredAbsolute {
@@ -13,7 +29,7 @@ body {
 
 #whiteWindow {
   border-radius: 15px;
-  background-color: white;
+  background-color: #F3C800;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
   margin: 25px;
 }
