@@ -4,6 +4,10 @@ body {
   overflow-x: hidden;
 }
 
+#pandoLogo {
+  height: 50px;
+}
+
 #loginButton {
   margin: 0px 15px;
 }

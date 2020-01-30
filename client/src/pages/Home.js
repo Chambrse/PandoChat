@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import logo from '../images/PandoChat_200x200.png';
+import logoIcon from '../images/PandoChat_IconOnly.png'
 import cartIcon from '../images/leaf-plants-nature-icon-23.png';
 import '../css/chat.css';
 import io from 'socket.io-client';
@@ -302,10 +303,9 @@ class Home extends Component {
         return (
             <div id='chatWindow'>
                 <div className='row p-1'>
-                    {/* <div className='col'>
-                        <img alt='Chatter logo' src={logo} id="chatterLogo"></img>
-                        <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
-                    </div> */}
+                    <div className='col'>
+                        <img alt='PandoChat Logo' src={logoIcon} id="PandoLogo"></img>
+                    </div>
                     <div className='col text-center'>
                         {/* moved the logout button to navbar, this no longer needed. */}
                         {/* {this.props.loggedIn ? (
