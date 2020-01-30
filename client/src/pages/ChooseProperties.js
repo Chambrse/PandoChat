@@ -43,7 +43,12 @@ class ChooseProperties extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onColorChange = this.onColorChange.bind(this);
+        this.messageClick = this.messageClick.bind(this);
     };
+
+    messageClick(id) {
+        //do nothing
+    }
 
     handleChange(event) {
         this.setState({
@@ -86,7 +91,7 @@ class ChooseProperties extends Component {
         axios.put('user', { color: this.state.color }).then(response => {
             // console.log(response);
             this.props.updateAppState({
-                user: response.data.user
+                user: {user: response.data.user}
             }, () => {
                 this.props.history.push("/home");
             });
@@ -120,7 +125,7 @@ class ChooseProperties extends Component {
                         <div className='row justify-content-center'>
                             <Message onClick={this.messageClick}
                                 classNames={'test'}
-                                username={this.props.user.username}
+                                username={this.props.user.user.username}
                                 msg={"This is what your messages will look like."}
                                 animation={'slidein .25s ease'}
                                 user={{ username: this.props.user.username, color: this.state.color }}

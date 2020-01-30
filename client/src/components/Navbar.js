@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import axios from 'axios';
+import ErrorBoundary from './ErrorBoundary';
 
 class Navbar extends React.Component {
     constructor(props) { //<----Method
@@ -64,19 +65,21 @@ class Navbar extends React.Component {
                             <a className="nav-link" href="#">Account</a>
                         </li> */}
                     </ul>
-                    {!this.props.loggedIn ? (
-                        <button class="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
-                    ) :
-                        <div class="dropdown m-3">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {this.props.user.user.username}
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Edit Profile</a>
-                                <a class="dropdown-item" onClick={this.logOut}>Logout</a>
+                    <ErrorBoundary>
+                        {!this.props.loggedIn || this.props.user === null ? (
+                            <button class="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
+                        ) :
+                            <div class="dropdown m-3">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {this.props.user && this.props.user.user ? this.props.user.user.username : null}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Edit Profile</a>
+                                    <a class="dropdown-item" onClick={this.logOut}>Logout</a>
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
+                    </ErrorBoundary>
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
                             <img style={{ height: '32px' }} src={fbshare}></img>

@@ -307,11 +307,12 @@ class Home extends Component {
                         <p style={{ position: 'absolute', top: '0px' }}>Alpha v0.1</p>
                     </div> */}
                     <div className='col text-center'>
-                        {this.props.loggedIn ? (
+                        {/* moved the logout button to navbar, this no longer needed. */}
+                        {/* {this.props.loggedIn ? (
                             <div>
                                 <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
                             </div>
-                        ) : null}
+                        ) : null} */}
                         {this.props.loggedIn && this.props.user.user.type == "admin" ? (
                             <div>
                                 <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>

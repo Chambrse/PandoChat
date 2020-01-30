@@ -88,11 +88,11 @@ router.post("/register", function (req, res) {
             password: req.body.password
         }).then(function (data) {
 
-            req.login({ user: { _id: data._id, username: data.username } }, function (err) {
+            req.login({ loggedIn: true, user: data}, function (err) {
 
                 if (err) throw err;
 
-                res.send({ loggedIn: true, user: data});
+                res.send({ loggedIn: true, user: {user: data}});
 
             });
 

@@ -67,7 +67,7 @@ class Register extends Component {
     handleSubmit(event) {
         axios.post('/register', this.state).then(response => {
             console.log(response.data);
-            this.setState(response.data);
+            // this.setState(response.data);
 
             if (response.data.loggedIn) {
                 this.props.updateAppState(response.data);
