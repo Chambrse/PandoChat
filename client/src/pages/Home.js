@@ -301,9 +301,9 @@ class Home extends Component {
         // console.log("home render");
         // console.log("messagesizerboolean", this.state.messageSizerBoolean);
         return (
-            <div id='chatWindow'>
+            <div id='chatWindow' class='container-fluid'>
                 <div className='row p-1'>
-                    <div className='col'>
+                    <div className='col mt-2'>
                         <img alt='PandoChat Logo' src={logoIcon} id="PandoLogo"></img>
                     </div>
                     <div className='col text-center'>
@@ -321,7 +321,7 @@ class Home extends Component {
                         ) : null}
                     </div>
                 </div>
-                <div className='row'>
+                <div className='row px-2'>
                     {this.props.loggedIn ? (
                         <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                     ) :
