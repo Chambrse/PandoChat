@@ -71,7 +71,7 @@ class App extends Component {
                 <TransitionGroup id='divOutsidePages' style={{ flex: 1 }} >
                   <CSSTransition
                     key={location.key}
-                    appear={true}
+                    // appear={true}
                     classNames="page"
                     timeout={1000}
                   >
