@@ -1,5 +1,5 @@
 {
-  "name": "PandoChat",
+  "name": "pandochat",
   "version": "0.1.0",
   "description": "A comprehensive, easy to use, high volume chat interface.",
   "main": "server.js",
@@ -29,7 +29,7 @@
     "connect-mongo": "^2.0.1",
     "connect-session-sequelize": "^5.2.2",
     "cookie-parser": "^1.4.3",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.2.0",
     "ejs": "^2.5.6",
     "express": "^4.15.4",
     "express-handlebars": "^3.0.0",

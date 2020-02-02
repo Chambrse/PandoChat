@@ -1,5 +1,5 @@
 {
-  "name": "PandoClient",
+  "name": "pandoclient",
   "version": "0.1.5",
   "private": true,
   "proxy": "http://localhost:3001/",
