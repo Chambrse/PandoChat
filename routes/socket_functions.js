@@ -306,7 +306,7 @@ module.exports = function (io) {
 
     function chatSim() {
 
-        user.find({ type: "bot"}).then((botUsers) => {
+        user.find({ type: "BOT"}).then((botUsers) => {
             console.log(botUsers);
             sendBotMessage(botUsers);
         });
