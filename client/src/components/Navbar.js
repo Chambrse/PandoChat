@@ -13,10 +13,11 @@ class Navbar extends React.Component {
     constructor(props) { //<----Method
         super(props);
         this.state = { //<----Initialize state
-
+            simOn: false
         };
         this.navHandler = this.navHandler.bind(this);
         this.logOut = this.logOut.bind(this);
+        this.admin = this.admin.bind(this);
 
     }
 
@@ -32,6 +33,16 @@ class Navbar extends React.Component {
             });
     }
 
+    admin() {
+        axios.get('admin/chatsim/on').then(response => {
+            console.log(response);
+        }, { timeout: 2000 })
+            .catch(() => {
+                console.log("error submitting adming command");
+            });
+    }
+
+
     navHandler(e) {
         console.log(e.target.getAttribute('linkto'));
         this.props.history.push(e.target.getAttribute('linkto'));
@@ -39,6 +50,7 @@ class Navbar extends React.Component {
 
     render() {  //<-----Method/Return JSX/HTML
         // console.log(this.props.history.location.pathname);
+        console.log(this.props.user.user.type);
         return (
             <nav className="navbar navbar-expand-lg navbar-dark indigo bounceInDown" style={{ backgroundColor: "#F0991A", zIndex: 1000 }}>
                 <div style={{ position: 'absolute', top: '0px', fontSize: '12px' }}>
@@ -79,6 +91,11 @@ class Navbar extends React.Component {
                                 </div>
                             </div>
                         }
+                        {this.props.user.user.type == "ADMIN" && this.props.loggedIn ? (
+                            <button class="btn btn-secondary" onClick={this.admin} type="button" id="adminConsoleButton">
+                                Admin
+                            </button>
+                        ) : null}
                     </ErrorBoundary>
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>

@@ -269,13 +269,7 @@ class Home extends Component {
 
     // Toggle the chat simulator on the server by sending an admin command
     chatSim() {
-        if (!this.state.sim) {
-            this.setState({ sim: true });
-            this.socket.emit("chat-message", { msg: "admin chatsim", username: "don't matter" });
-        } else {
-            this.setState({ sim: false });
-            this.socket.emit("chat-message", { msg: "admin simOff", username: "don't matter" });
-        }
+
     }
 
     sendRandom() {
