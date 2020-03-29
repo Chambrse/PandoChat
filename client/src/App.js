@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import About from './pages/About';
+import Tutorial from './pages/Tutorial';
 
 class App extends Component {
   constructor() {
@@ -52,7 +53,6 @@ class App extends Component {
   }
 
   render() {
-    // console.log("app render");
     if (this.state.loading === 'initial') { return <Loading /> }
     return (
       <div style={{
@@ -124,6 +124,12 @@ class App extends Component {
                               user={this.state.user}
                               updateAppState={this.updateAppState}
                             />
+                          </div>
+                        )} />
+                      <Route path="/tutorial"
+                        render={() => (
+                          <div style={{ position: 'relative' }}>
+                            <Tutorial/>
                           </div>
                         )} />
                       <Route exact path="/" render={() => <Redirect to="/home" />} />

@@ -40,9 +40,7 @@ class Home extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
-        this.logOut = this.logOut.bind(this);
         this.chatSim = this.chatSim.bind(this);
-        this.sendRandom = this.sendRandom.bind(this);
         this.messageClick = this.messageClick.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
     };
@@ -248,22 +246,9 @@ class Home extends Component {
         });
     }
 
-
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value,
-        });
-    }
-
-    // Log out
-    logOut() {
-        // console.log('logout running')
-        axios.get('/logout').then(response => {
-            this.props.updateAppState(response.data);
-            // this.props.history.push("/login");
-        }, {timeout: 2000})
-        .catch(()=> {
-            console.log("error logging out");
         });
     }
 
@@ -278,10 +263,6 @@ class Home extends Component {
         }
     }
 
-    sendRandom() {
-        this.socket.emit("chat-message", { msg: "admin sendOneRandom", username: "don't matter" });
-    }
-
     messageClick(messageId) {
         let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === messageId)[0];
         this.setState({
@@ -291,34 +272,12 @@ class Home extends Component {
         this.messageInputDiv.focus();
     }
 
-
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(nextProps.location);
-    //     console.log(this.props.location);
-    // }
-
     render() {
-        // console.log("home render");
-        // console.log("messagesizerboolean", this.state.messageSizerBoolean);
         return (
             <div id='chatWindow' class='container-fluid'>
                 <div className='row p-1'>
                     <div className='col mt-2'>
                         <img alt='PandoChat Logo' src={logoIcon} id="PandoLogo"></img>
-                    </div>
-                    <div className='col text-center'>
-                        {/* moved the logout button to navbar, this no longer needed. */}
-                        {/* {this.props.loggedIn ? (
-                            <div>
-                                <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
-                            </div>
-                        ) : null} */}
-                        {this.props.loggedIn && this.props.user.user.type == "ADMIN" ? (
-                            <div>
-                                <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
-                                <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
-                            </div>
-                        ) : null}
                     </div>
                 </div>
                 <div className='row px-2'>
@@ -351,7 +310,7 @@ class Home extends Component {
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
                                 <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 2 : 10}} />
+                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 2 : 10 }} />
                                     {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
