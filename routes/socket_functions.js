@@ -123,28 +123,40 @@ let colorPallete =[
 ];
 
 module.exports = function (io) {
+
+    // initialize messageID variable.
     let messageID;
 
+    // See what the ID of the latest message is so we can increment it.
     message.find({}).select("id").sort({ "id": -1 }).limit(1).exec(function (err, doc) {
 
+        // If it's a new database, start at 0, otherwise continue incrementing messageID
         messageID = doc[0] == undefined ? 0 : doc[0].id;
-
         console.log("messageid", messageID);
+
+        // Listen for new connections.
         io.sockets.on("connection", function (socket) {
 
             let user;
 
+            // If the connection is logged in.
             if (socket.handshake.session.passport) {
+                console.log(socket.handshake.session.passport.user.user.username + ' has opened a connection.');
+
+                // Define the current user for this connection.
                 user = {
                     _id: socket.handshake.session.passport.user.user._id,
                     username: socket.handshake.session.passport.user.user.username,
                     color: socket.handshake.session.passport.user.user.color
                 }
-                console.log(socket.handshake.session.passport.user.user);
 
+                // Increment message id.
                 messageID++;
+
+                // Emit user connected message.
                 io.sockets.emit("chat-message", { id: messageID, username: user.username, msg: "User Connected", user: user });
 
+                // Attach handler.
                 socket.on("chat-message", function (message) { messageReceivedHandler(message, user) });
             }
 
@@ -176,20 +188,11 @@ module.exports = function (io) {
             //no matter what, increment the messageID
             messageID++;
 
-            // console.log(incomingMessage.replyTo.user.username);
-            // console.log(user.username);
-            // console.log(incomingMessage.replyTo.user.username !== user.username);
-            // console.log(incomingMessage);
             //if this message is a reply
             if (incomingMessage.replyTo && ((incomingMessage.replyTo.user.username !== user.username) || incomingMessage.replyTo.thread)) {
-                // console.log(incomingMessage.replyTo.user.username);
-                // console.log(user.username);
-                // console.log(incomingMessage.replyTo.user.username !== user.username);
-                console.log(incomingMessage.replyTo);
-                console.log("this is a reply")
+
                 // if the message that this is a reply to is already part of a thread
                 if (incomingMessage.replyTo.thread !== null) {
-                    console.log("continuing thread");
                     // update the thread
                     message.create({
                         text: incomingMessage.msg,
@@ -221,7 +224,6 @@ module.exports = function (io) {
 
                 } else if (incomingMessage.replyTo.user.username !== user.username) {
                     //create new thread
-                    console.log("new thread");
 
                     if (threadColorIndex >= colorPallete.length - 1) {
                         threadColorIndex = 0;
@@ -259,19 +261,10 @@ module.exports = function (io) {
                             message.updateMany({ _id: { $in: [incomingMessage.replyTo.objectId, messagedata._id] } }, { thread: { objectId: data._id, color: data.color } });
                         });
                     });
-
-                } else {
-                    
-                }
+                } 
             } else {
-                // console.log("no thread");
-
-                //send normal message
                 sendNormalMessage(incomingMessage, user);
             }
-
-
-
         };
     }
 
@@ -299,15 +292,10 @@ module.exports = function (io) {
         }).catch(function (err) {
             if (err) throw err;
         });
-    }
-
-
-
+    };
 
     function chatSim() {
-
         user.find({ type: "BOT"}).then((botUsers) => {
-            console.log(botUsers);
             sendBotMessage(botUsers);
         });
     };
