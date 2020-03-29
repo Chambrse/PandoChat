@@ -61,6 +61,11 @@ class Navbar extends React.Component {
                                 <span className="sr-only">(current)</span>
                             </div>
                         </li>
+                        <li className={"nav-item " + (this.props.history.location.pathname === '/tutorial' ? 'active' : 'noActive')}>
+                            <div className="nav-link" linkto='/tutorial' onClick={this.navHandler}>Tutorial
+                                <span className="sr-only">(current)</span>
+                            </div>
+                        </li>
                         {/* <li className="nav-item">
                             <a className="nav-link" href="#">Account</a>
                         </li> */}
