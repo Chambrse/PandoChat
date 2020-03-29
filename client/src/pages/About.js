@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 import { SketchPicker } from 'react-color';
 import Message from '../components/Message';
 import profileImage from '../images/profileImage.jpg'
+import Adsense from 'react-adsense';
 
 
 
@@ -67,6 +68,10 @@ class About extends Component {
                         </div>
                     </div>
                 </div>
+                <Adsense.Google
+                    client='ca-pub-4385272176217965'
+                    slot='1784987984'
+                />
             </div>)
     }
 }
