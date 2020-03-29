@@ -6,8 +6,6 @@ import { withRouter } from "react-router";
 import { SketchPicker } from 'react-color';
 import Message from '../components/Message';
 import profileImage from '../images/profileImage.jpg'
-import Adsense from 'react-adsense';
-
 
 
 class About extends Component {
@@ -19,6 +17,10 @@ class About extends Component {
         }
 
     };
+
+    componentDidMount() {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
 
     render() {
         return (
@@ -68,10 +70,12 @@ class About extends Component {
                         </div>
                     </div>
                 </div>
-                <Adsense.Google
-                    client='ca-pub-4385272176217965'
-                    slot='1784987984'
-                />
+                <ins className="adsbygoogle"
+                    style={{display:'block'}}
+                    data-ad-client="ca-pub-4385272176217965"
+                    data-ad-slot="1784987984"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
             </div>)
     }
 }
