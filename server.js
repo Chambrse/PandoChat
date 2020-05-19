@@ -91,4 +91,6 @@ server.listen(PORT, function () {
 });
 
 // Run the socket.io code.
-require("./routes/socket_functions")(io);
+require("./routes/socket_functions").startSocket(io);
+
+app.chatsim = require('./controllers/chatsim')(io);

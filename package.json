@@ -20,11 +20,16 @@
     "concurrently": "^3.5.0",
     "nodemon": "^1.11.0"
   },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
   "dependencies": {
     "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "bootstrap-toggle": "^2.2.2",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^2.0.1",
     "connect-session-sequelize": "^5.2.2",
