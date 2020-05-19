@@ -57,7 +57,7 @@
     "react-adsense": "^0.1.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-color": "^2.17.3",
-    "sequelize": "^4.38.0",
+    "sequelize": "^5.15.1",
     "serve-favicon": "^2.5.0",
     "socket.io": "^1.7.3",
     "validator": "^10.8.0",
