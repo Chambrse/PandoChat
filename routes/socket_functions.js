@@ -161,6 +161,7 @@ let socket_functions = {
     },
     messageReceivedHandler: (incomingMessage, user, io) => {
         messageID++;
+        let thisMessageId = messageID;
 
         //if this message is a reply
         if (incomingMessage.replyTo && ((incomingMessage.replyTo.user.username !== user.username) || incomingMessage.replyTo.thread)) {
@@ -172,7 +173,7 @@ let socket_functions = {
                     text: incomingMessage.msg,
                     username: user.username,
                     user: user._id,
-                    id: messageID,
+                    id: thisMessageId,
                     color: incomingMessage.replyTo.color,
                     replyTo: incomingMessage.replyTo ? incomingMessage.replyTo.objectId : null,
                     thread: incomingMessage.replyTo.thread.objectId
@@ -181,7 +182,7 @@ let socket_functions = {
                     thread.findByIdAndUpdate(incomingMessage.replyTo.thread.objectId, { "$push": { "messages": messagedata._id } }).then(function (updatedThread) {
 
                         io.sockets.emit("chat-message", {
-                            id: messageID,
+                            id: thisMessageId,
                             objectId: messagedata._id,
                             username: user.username,
                             user: user,
@@ -210,7 +211,7 @@ let socket_functions = {
                     text: incomingMessage.msg,
                     username: user.username,
                     user: user._id,
-                    id: messageID,
+                    id: thisMessageId,
                     color: incomingMessage.replyTo.color,
                     replyTo: incomingMessage.replyTo ? incomingMessage.replyTo.objectId : null
                 }).then(function (messagedata) {
@@ -221,7 +222,7 @@ let socket_functions = {
                     }).then(function (data) {
 
                         io.sockets.emit("chat-message", {
-                            id: messageID,
+                            id: thisMessageId,
                             objectId: messagedata._id,
                             username: user.username,
                             user: user,
@@ -242,15 +243,17 @@ let socket_functions = {
             }
         } else {
             //send normal message
-            socket_functions.sendNormalMessage(incomingMessage, user, io);
+            socket_functions.sendNormalMessage(incomingMessage, user, io, thisMessageId);
         }
 
     },
-    sendNormalMessage: (incomingMessage, user, io) => {
+    sendNormalMessage: (incomingMessage, user, io, thisMessageId) => {
+
+        // console.log(thisMessageId);
         message.create({
             text: incomingMessage.msg,
             username: user.username,
-            id: messageID,
+            id: thisMessageId,
             user: user._id,
             color: user.color,
             replyTo: null,
@@ -258,7 +261,7 @@ let socket_functions = {
         }).then(function (data) {
 
             io.sockets.emit("chat-message", {
-                id: messageID,
+                id: thisMessageId,
                 objectId: data._id,
                 username: user.username,
                 user: user,

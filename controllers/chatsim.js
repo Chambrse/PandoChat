@@ -8,12 +8,19 @@ function chatSimFunction(io) {
     let chatSim = {
         on: false,
         io: io,
+        speed: 3,
+        getSpeed: () => {
+            return chatSim.speed;
+        },
+        setSpeed: (newSpeed) => {
+            chatSim.speed = newSpeed;
+        },
         turnOff: () => {
             chatSim.on = false;
         },
         turnOn: () => {
-            console.log("Chatsim Turning ON");
-            console.log(chatSim.on);
+            // console.log("Chatsim Turning ON");
+            // console.log(chatSim.on);
             if (!chatSim.on) {
                 chatSim.chatSim();
             }
@@ -21,7 +28,7 @@ function chatSimFunction(io) {
             chatSim.io = io;
         },
         chatSim: () => {
-            console.log("this si foing");
+            // console.log("this si foing");
             user.find({ type: "BOT"}).then((botUsers) => {
                 chatSim.sendBotMessage(botUsers);
             });

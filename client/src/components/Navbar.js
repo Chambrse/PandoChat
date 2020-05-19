@@ -72,7 +72,6 @@ class Navbar extends React.Component {
                             <a className="nav-link" href="#">Account</a>
                         </li> */}
                     </ul>
-                    <ErrorBoundary>
                         {!this.props.loggedIn || this.props.user === null ? (
                             <button className="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
                         ) :
@@ -86,8 +85,6 @@ class Navbar extends React.Component {
                                 </div>
                             </div>
                         }
-
-                    </ErrorBoundary>
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
                             <img style={{ height: '32px' }} src={fbshare}></img>

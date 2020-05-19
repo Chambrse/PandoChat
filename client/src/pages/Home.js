@@ -80,6 +80,8 @@ class Home extends Component {
             event.preventDefault();
             this.messageInputDiv.focus();
 
+            // console.log("keeyhandler", this.state.selectedMessage);
+
             if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
                 let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
                 this.setState({
@@ -93,6 +95,9 @@ class Home extends Component {
                     selectedMessage: messageToSelect
                 });
             };
+
+            // console.log("keeyhandler after update", this.state.selectedMessage, this.state.selectedMessageId);
+
         }
 
         // escape, reset the selected message
