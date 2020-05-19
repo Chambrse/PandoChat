@@ -98,6 +98,8 @@ router.post("/register", function (req, res) {
 
         }).catch(function (err) {
 
+            // console.log("it's caught");
+
             if (err) 
             {console.log(err)};
 
