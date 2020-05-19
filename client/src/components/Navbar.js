@@ -42,7 +42,7 @@ class Navbar extends React.Component {
         // console.log(this.props.history.location.pathname);
         // console.log(this.props.user.user.type);
         return (
-            <nav className="navbar navbar-expand-lg navbar-dark indigo bounceInDown" style={{ backgroundColor: "#F0991A", zIndex: 1000 }}>
+            <nav className="navbar navbar-expand-lg navbar-dark indigo" style={{ backgroundColor: "#F0991A", zIndex: 1000 }}>
                 <div style={{ position: 'absolute', top: '0px', fontSize: '12px' }}>
                     alpha {jsonpackage.version}
                 </div>
