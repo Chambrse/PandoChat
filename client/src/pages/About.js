@@ -4,7 +4,6 @@ import { withRouter } from "react-router";
 import profileImage from '../images/profileImage.jpg'
 
 
-
 class About extends Component {
     constructor() {
         super();
@@ -14,6 +13,10 @@ class About extends Component {
         }
 
     };
+
+    componentDidMount() {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
 
     render() {
         return (
@@ -63,6 +66,12 @@ class About extends Component {
                         </div>
                     </div>
                 </div>
+                <ins className="adsbygoogle"
+                    style={{display:'block'}}
+                    data-ad-client="ca-pub-4385272176217965"
+                    data-ad-slot="1784987984"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
             </div>)
     }
 }

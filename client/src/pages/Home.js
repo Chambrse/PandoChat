@@ -78,6 +78,8 @@ class Home extends Component {
             event.preventDefault();
             this.messageInputDiv.focus();
 
+            // console.log("keeyhandler", this.state.selectedMessage);
+
             if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
                 let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
                 this.setState({
@@ -91,6 +93,9 @@ class Home extends Component {
                     selectedMessage: messageToSelect
                 });
             };
+
+            // console.log("keeyhandler after update", this.state.selectedMessage, this.state.selectedMessageId);
+
         }
 
         // escape, reset the selected message
@@ -254,13 +259,7 @@ class Home extends Component {
 
     // Toggle the chat simulator on the server by sending an admin command
     chatSim() {
-        if (!this.state.sim) {
-            this.setState({ sim: true });
-            this.socket.emit("chat-message", { msg: "admin chatsim", username: "don't matter" });
-        } else {
-            this.setState({ sim: false });
-            this.socket.emit("chat-message", { msg: "admin simOff", username: "don't matter" });
-        }
+
     }
 
     messageClick(messageId) {
@@ -310,7 +309,7 @@ class Home extends Component {
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
                                 <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 2 : 10 }} />
+                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 3 : 10}} />
                                     {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}

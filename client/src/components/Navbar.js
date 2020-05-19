@@ -8,12 +8,13 @@ import { withRouter } from "react-router";
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import axios from 'axios';
 import ErrorBoundary from './ErrorBoundary';
+import { Modal } from 'react-bootstrap';
+
 
 class Navbar extends React.Component {
     constructor(props) { //<----Method
         super(props);
         this.state = { //<----Initialize state
-
         };
         this.navHandler = this.navHandler.bind(this);
         this.logOut = this.logOut.bind(this);
@@ -39,6 +40,7 @@ class Navbar extends React.Component {
 
     render() {  //<-----Method/Return JSX/HTML
         // console.log(this.props.history.location.pathname);
+        // console.log(this.props.user.user.type);
         return (
             <nav className="navbar navbar-expand-lg navbar-dark indigo" style={{ backgroundColor: "#F0991A", zIndex: 1000 }}>
                 <div style={{ position: 'absolute', top: '0px', fontSize: '12px' }}>
@@ -70,21 +72,19 @@ class Navbar extends React.Component {
                             <a className="nav-link" href="#">Account</a>
                         </li> */}
                     </ul>
-                    <ErrorBoundary>
                         {!this.props.loggedIn || this.props.user === null ? (
-                            <button class="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
+                            <button className="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
                         ) :
-                            <div class="dropdown m-3">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div className="dropdown m-3">
+                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {this.props.user && this.props.user.user ? this.props.user.user.username : null}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="#">Edit Profile</a>
-                                    <a class="dropdown-item" onClick={this.logOut}>Logout</a>
+                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a className="dropdown-item" href="#">Edit Profile</a>
+                                    <a className="dropdown-item" onClick={this.logOut}>Logout</a>
                                 </div>
                             </div>
                         }
-                    </ErrorBoundary>
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
                             <img style={{ height: '32px' }} src={fbshare}></img>
