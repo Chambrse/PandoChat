@@ -269,13 +269,7 @@ class Home extends Component {
 
     // Toggle the chat simulator on the server by sending an admin command
     chatSim() {
-        if (!this.state.sim) {
-            this.setState({ sim: true });
-            this.socket.emit("chat-message", { msg: "admin chatsim", username: "don't matter" });
-        } else {
-            this.setState({ sim: false });
-            this.socket.emit("chat-message", { msg: "admin simOff", username: "don't matter" });
-        }
+
     }
 
     sendRandom() {
@@ -298,8 +292,6 @@ class Home extends Component {
     // }
 
     render() {
-        // console.log("home render");
-        // console.log("messagesizerboolean", this.state.messageSizerBoolean);
         return (
             <div id='chatWindow' class='container-fluid'>
                 <div className='row p-1'>
@@ -313,12 +305,12 @@ class Home extends Component {
                                 <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
                             </div>
                         ) : null} */}
-                        {this.props.loggedIn && this.props.user.user.type == "ADMIN" ? (
+                        {/* {this.props.loggedIn && this.props.user.user.type == "ADMIN" ? (
                             <div>
                                 <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
                                 <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
                             </div>
-                        ) : null}
+                        ) : null} */}
                     </div>
                 </div>
                 <div className='row px-2'>
