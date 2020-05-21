@@ -10,8 +10,11 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import About from './pages/About';
+<<<<<<< HEAD
 import Tutorial from './pages/Tutorial';
+=======
 import AdminConsole from "./pages/AdminConsole";
+>>>>>>> master
 
 class App extends Component {
   constructor() {

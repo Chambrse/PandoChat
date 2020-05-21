@@ -40,9 +40,7 @@ class Home extends Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.addMessage = this.addMessage.bind(this);
         this.handleKeydown = this.handleKeydown.bind(this);
-        this.logOut = this.logOut.bind(this);
         this.chatSim = this.chatSim.bind(this);
-        this.sendRandom = this.sendRandom.bind(this);
         this.messageClick = this.messageClick.bind(this);
         this.scrollToBottom = this.scrollToBottom.bind(this);
     };
@@ -253,32 +251,15 @@ class Home extends Component {
         });
     }
 
-
     handleChange(event) {
         this.setState({
             [event.target.name]: event.target.value,
         });
     }
 
-    // Log out
-    logOut() {
-        // console.log('logout running')
-        axios.get('/logout').then(response => {
-            this.props.updateAppState(response.data);
-            // this.props.history.push("/login");
-        }, {timeout: 2000})
-        .catch(()=> {
-            console.log("error logging out");
-        });
-    }
-
     // Toggle the chat simulator on the server by sending an admin command
     chatSim() {
 
-    }
-
-    sendRandom() {
-        this.socket.emit("chat-message", { msg: "admin sendOneRandom", username: "don't matter" });
     }
 
     messageClick(messageId) {
@@ -290,33 +271,12 @@ class Home extends Component {
         this.messageInputDiv.focus();
     }
 
-
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(nextProps.location);
-    //     console.log(this.props.location);
-    // }
-
     render() {
-        // console.log(this.chatFrame.clientHeight);
         return (
             <div id='chatWindow' class='container-fluid'>
                 <div className='row p-1'>
                     <div className='col mt-2'>
                         <img alt='PandoChat Logo' src={logoIcon} id="PandoLogo"></img>
-                    </div>
-                    <div className='col text-center'>
-                        {/* moved the logout button to navbar, this no longer needed. */}
-                        {/* {this.props.loggedIn ? (
-                            <div>
-                                <button type='button' className='btn btn-secondary' onClick={this.logOut}>Log Out</button> <br></br> <br></br>
-                            </div>
-                        ) : null} */}
-                        {/* {this.props.loggedIn && this.props.user.user.type == "ADMIN" ? (
-                            <div>
-                                <button type='button' className='btn btn-secondary' onClick={this.chatSim}>Toggle Chat Sim</button><br></br><br></br>
-                                <button type='button' className='btn btn-secondary' onClick={this.sendRandom}>send one random</button>
-                            </div>
-                        ) : null} */}
                     </div>
                 </div>
                 <div className='row px-2'>

@@ -11,7 +11,6 @@ import Axios from "axios";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import About from './pages/About';
 import Tutorial from './pages/Tutorial';
-import AdminConsole from "./pages/AdminConsole";
 
 class App extends Component {
   constructor() {
@@ -117,7 +116,7 @@ class App extends Component {
                               user={this.state.user}
                             />
                           </div>)} />
-                          <Route path="/about"
+                      <Route path="/about"
                         render={() => (
                           <div style={{ position: 'relative' }}>
                             <About
@@ -125,14 +124,6 @@ class App extends Component {
                               user={this.state.user}
                               updateAppState={this.updateAppState}
                             />
-                          </div>
-                        )} />                      
-                        <Route path="/admin"
-                        render={() => (
-                          <div style={{ position: 'relative' }}>
-                            <AdminConsole>
-                              
-                            </AdminConsole>
                           </div>
                         )} />
                       <Route path="/tutorial"
