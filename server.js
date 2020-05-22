@@ -15,6 +15,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const sharedsession = require("express-socket.io-session");
 
+let Mailer = require('./controllers/Mailer')();
+Mailer.verify();
+
 const PORT = process.env.PORT || 3001;
 
 // Models
@@ -94,3 +97,4 @@ server.listen(PORT, function () {
 require("./routes/socket_functions").startSocket(io);
 
 app.chatsim = require('./controllers/chatsim')(io);
+app.Mailer = Mailer;

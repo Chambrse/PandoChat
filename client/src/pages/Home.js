@@ -68,6 +68,7 @@ class Home extends Component {
         // On enter, emit the message.
         // If you're logged in and you've typed something into the box
         if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
+            console.log("Attempting to send message.")
             this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.user.username, user: { username: user.user.username, color: user.user.color }, replyTo: this.state.selectedMessage });
             this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
             this.scrollToBottom();

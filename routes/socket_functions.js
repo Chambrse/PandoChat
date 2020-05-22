@@ -160,6 +160,7 @@ let socket_functions = {
         });
     },
     messageReceivedHandler: (incomingMessage, user, io) => {
+        console.log("message received");
         messageID++;
         let thisMessageId = messageID;
 
