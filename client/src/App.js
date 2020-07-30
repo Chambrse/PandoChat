@@ -12,6 +12,8 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import About from './pages/About';
 import Tutorial from './pages/Tutorial';
 import AdminConsole from "./pages/AdminConsole";
+import io from 'socket.io-client';
+
 
 class App extends Component {
   constructor() {
@@ -41,6 +43,7 @@ class App extends Component {
 
   componentWillMount() {
     this.getUser();
+    this.socket = io(window.location.host);
     console.log("Welcome to Pando.Chat!")
   }
 
@@ -66,7 +69,8 @@ class App extends Component {
             <Navbar
               loggedIn={this.state.loggedIn}
               user={this.state.user}
-              updateAppState={this.updateAppState} />
+              updateAppState={this.updateAppState}
+              socket={this.socket} />
             <Route
               render={({ location }) => (
                 <TransitionGroup id='divOutsidePages' style={{ flex: 1 }} >
@@ -104,6 +108,7 @@ class App extends Component {
                               loggedIn={this.state.loggedIn}
                               updateAppState={this.updateAppState}
                               user={this.state.user}
+                              socket={this.socket}
                             />
                           </div>
                         )} />
@@ -117,7 +122,7 @@ class App extends Component {
                               user={this.state.user}
                             />
                           </div>)} />
-                          <Route path="/about"
+                      <Route path="/about"
                         render={() => (
                           <div style={{ position: 'relative' }}>
                             <About
@@ -126,19 +131,19 @@ class App extends Component {
                               updateAppState={this.updateAppState}
                             />
                           </div>
-                        )} />                      
-                        <Route path="/admin"
+                        )} />
+                      <Route path="/admin"
                         render={() => (
                           <div style={{ position: 'relative' }}>
                             <AdminConsole>
-                              
+
                             </AdminConsole>
                           </div>
                         )} />
                       <Route path="/tutorial"
                         render={() => (
                           <div style={{ position: 'relative' }}>
-                            <Tutorial/>
+                            <Tutorial />
                           </div>
                         )} />
                       <Route exact path="/" render={() => <Redirect to="/home" />} />

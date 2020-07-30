@@ -15,11 +15,48 @@ class Navbar extends React.Component {
     constructor(props) { //<----Method
         super(props);
         this.state = { //<----Initialize state
+            email: '',
+            emailErrors: [],
+            password: '',
+            passwordErrors: [],
+            redirectTo: null,
+            authError: false
         };
         this.navHandler = this.navHandler.bind(this);
         this.logOut = this.logOut.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
     }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.setState({authError: false}, () => {
+            axios.post('/login', this.state).then(response => {
+                this.setState(response.data);
+                console.log(response);
+    
+                if (response.data.loggedIn) {
+                    this.props.updateAppState(response.data);
+                    // this.props.history.push("/home");
+                    this.props.socket.disconnect();
+                    this.props.socket.connect();
+                    this.props.socket.emit("socket-login");
+                    
+                }
+    
+            }).catch(err => {
+                console.log(err);
+                this.setState({ authError: true })
+            });
+        });
+    }
+
+    handleChange(event) {
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    };
 
     // Log out
     logOut() {
@@ -73,32 +110,65 @@ class Navbar extends React.Component {
                                 <div className="nav-link" linkto='/admin' onClick={this.navHandler}>Admin
                                                         <span className="sr-only">(current)</span>
                                 </div>
-                            </li>) : null}   
+                            </li>) : null}
                         {/* <li className="nav-item">
                             <a className="nav-link" href="#">Account</a>
                         </li> */}
                     </ul>
-                        {!this.props.loggedIn || this.props.user === null ? (
-                            <button className="btn btn-secondary m-3"><Link style={{ textDecoration: 'none', color: 'white' }} to='/login'><span id='loginButton'>Login</span></Link></button>
-                        ) :
-                            <div className="dropdown m-3">
-                                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {this.props.user && this.props.user.user ? this.props.user.user.username : null}
-                                </button>
-                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a className="dropdown-item" href="#">Edit Profile</a>
-                                    <a className="dropdown-item" onClick={this.logOut}>Logout</a>
+                    {!this.props.loggedIn || this.props.user === null ? (
+                        <div>
+                            <form class="form-inline" onSubmit={this.handleSubmit}>
+                                <div className='form-group loginInput'>
+                                    <input type="text" name='email' placeholder='Email' className={`form-control ${this.state.emailErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.email} onChange={this.handleChange} />
+                                    {this.state.emailErrors.length > 0 ? (
+                                        this.state.emailErrors.map((element, index) => (
+                                            <div key={index} className='invalid-feedback'>
+                                                {element}
+                                            </div>
+                                        ))
+                                    ) : null}
                                 </div>
+                                <div className='form-group loginInput'>
+                                    <input type="password" name='password' placeholder='Password' className={`form-control ${this.state.passwordErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.password} onChange={this.handleChange} />
+                                    {this.state.passwordErrors.length > 0 ? (
+                                        this.state.passwordErrors.map((element, index) => (
+                                            <div key={index} className='invalid-feedback'>
+                                                {element}
+                                            </div>
+                                        ))
+                                    ) : null}
+                                </div>
+                                <br></br>
+                                <div className='form-group loginInput'>
+                                    <input className='form-control btn btn-secondary' type="submit" value="Login" />
+                                    {this.state.authError ? (
+                                        <div className='p-2' style={{ color: 'red' }}>
+                                            Email or Password incorrect.
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </form>
+                            
+                        </div>
+                    ) :
+                        <div className="dropdown m-3">
+                            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {this.props.user && this.props.user.user ? this.props.user.user.username : null}
+                            </button>
+                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a className="dropdown-item" href="#">Edit Profile</a>
+                                <a className="dropdown-item" onClick={this.logOut}>Logout</a>
                             </div>
-                        }
+                        </div>
+                    }
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
-                            <img style={{ height: '32px' }} src={fbshare}></img>
+                            <i class="fa fa-facebook-square fa-lg"></i>
                         </a>
                     </span>
                     <span className="navbar-text white-text p-1">
                         <a href='https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.pando.chat&text=PandoChat%20-%20Join%20the%20conversation!'>
-                            <img style={{ height: '32px' }} src={twittershare}></img>
+                        <i class="fa fa-twitter-square fa-lg"></i>
                         </a>
                     </span>
                 </div>

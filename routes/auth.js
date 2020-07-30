@@ -30,7 +30,7 @@ router.post("/login", passport.authenticate("local", {
     failureflash: true
 }), function (req, res) {
     req.session.save(function () {
-        console.log(req.session);
+        console.log(req.session.passport.user);
         console.log('login route callback')
         res.send({ loggedIn: true, user: req.session.passport.user });
     });

@@ -1,13 +1,13 @@
 var user = require("../database/models/user");
-var socket = require('../routes/socket_functions');
+var socket = require('../routes/SocketController');
 let randomSentence = require("random-sentence");
 
-function chatSimFunction(io) {
+function chatSimFunction(socket) {
 
 
     let chatSim = {
         on: false,
-        io: io,
+        io: socket.io,
         speed: 3,
         getSpeed: () => {
             return chatSim.speed;
@@ -19,13 +19,11 @@ function chatSimFunction(io) {
             chatSim.on = false;
         },
         turnOn: () => {
-            // console.log("Chatsim Turning ON");
-            // console.log(chatSim.on);
             if (!chatSim.on) {
                 chatSim.chatSim();
             }
             chatSim.on = true;
-            chatSim.io = io;
+            chatSim.io = socket.io;
         },
         chatSim: () => {
             // console.log("this si foing");

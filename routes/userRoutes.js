@@ -3,9 +3,6 @@ var user = require("../database/models/user");
 var router = express.Router();
 var passport = require("passport");
 
-
-
-// Returns user info (from the session data) if the user is authenticated.
 router.put("/user", authenticationMiddleware(), function (req, res) {
     console.log(req.session.passport.user);
     console.log(req.body);

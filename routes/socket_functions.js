@@ -1,7 +1,6 @@
 //-----------------------------------------------------------------------------
 // Configure web sockets.
 //-----------------------------------------------------------------------------
-var user = require("../database/models/user");
 var message = require("../database/models/messages");
 var thread = require("../database/models/thread");
 
@@ -13,151 +12,151 @@ let socket_functions = {
     socket: null,
     colorPallete: [
         {
-            "hsl" : {
-                "h" : 49.3827160493827,
-                "s" : 1,
-                "l" : 0.476470588235294,
-                "a" : 1
+            "hsl": {
+                "h": 49.3827160493827,
+                "s": 1,
+                "l": 0.476470588235294,
+                "a": 1
             },
-            "hex" : "#f3c800",
-            "rgb" : {
-                "r" : 243,
-                "g" : 200,
-                "b" : 0,
-                "a" : 1
+            "hex": "#f3c800",
+            "rgb": {
+                "r": 243,
+                "g": 200,
+                "b": 0,
+                "a": 1
             },
-            "hsv" : {
-                "h" : 49.3827160493827,
-                "s" : 1,
-                "v" : 0.952941176470588,
-                "a" : 1
+            "hsv": {
+                "h": 49.3827160493827,
+                "s": 1,
+                "v": 0.952941176470588,
+                "a": 1
             },
-            "oldHue" : 264.935064935065,
-            "source" : "hex"
-        },{
-            "hsl" : {
-                "h" : 35.607476635514,
-                "s" : 0.877049180327869,
-                "l" : 0.52156862745098,
-                "a" : 1
+            "oldHue": 264.935064935065,
+            "source": "hex"
+        }, {
+            "hsl": {
+                "h": 35.607476635514,
+                "s": 0.877049180327869,
+                "l": 0.52156862745098,
+                "a": 1
             },
-            "hex" : "#f0991a",
-            "rgb" : {
-                "r" : 240,
-                "g" : 153,
-                "b" : 26,
-                "a" : 1
+            "hex": "#f0991a",
+            "rgb": {
+                "r": 240,
+                "g": 153,
+                "b": 26,
+                "a": 1
             },
-            "hsv" : {
-                "h" : 35.607476635514,
-                "s" : 0.891666666666667,
-                "v" : 0.941176470588235,
-                "a" : 1
+            "hsv": {
+                "h": 35.607476635514,
+                "s": 0.891666666666667,
+                "v": 0.941176470588235,
+                "a": 1
             },
-            "oldHue" : 264.935064935065,
-            "source" : "hex"
-        },{
-            "hsl" : {
-                "h" : 2.50000000000003,
-                "s" : 0.134831460674157,
-                "l" : 0.349019607843137,
-                "a" : 1
+            "oldHue": 264.935064935065,
+            "source": "hex"
+        }, {
+            "hsl": {
+                "h": 2.50000000000003,
+                "s": 0.134831460674157,
+                "l": 0.349019607843137,
+                "a": 1
             },
-            "hex" : "#654e4d",
-            "rgb" : {
-                "r" : 101,
-                "g" : 78,
-                "b" : 77,
-                "a" : 1
+            "hex": "#654e4d",
+            "rgb": {
+                "r": 101,
+                "g": 78,
+                "b": 77,
+                "a": 1
             },
-            "hsv" : {
-                "h" : 2.50000000000003,
-                "s" : 0.237623762376238,
-                "v" : 0.396078431372549,
-                "a" : 1
+            "hsv": {
+                "h": 2.50000000000003,
+                "s": 0.237623762376238,
+                "v": 0.396078431372549,
+                "a": 1
             },
-            "oldHue" : 264.935064935065,
-            "source" : "hex"
-        },{
-            "hsl" : {
-                "h" : 12.8571428571429,
-                "s" : 0.578512396694215,
-                "l" : 0.474509803921569,
-                "a" : 1
+            "oldHue": 264.935064935065,
+            "source": "hex"
+        }, {
+            "hsl": {
+                "h": 12.8571428571429,
+                "s": 0.578512396694215,
+                "l": 0.474509803921569,
+                "a": 1
             },
-            "hex" : "#bf5133",
-            "rgb" : {
-                "r" : 191,
-                "g" : 81,
-                "b" : 51,
-                "a" : 1
+            "hex": "#bf5133",
+            "rgb": {
+                "r": 191,
+                "g": 81,
+                "b": 51,
+                "a": 1
             },
-            "hsv" : {
-                "h" : 12.8571428571429,
-                "s" : 0.732984293193717,
-                "v" : 0.749019607843137,
-                "a" : 1
+            "hsv": {
+                "h": 12.8571428571429,
+                "s": 0.732984293193717,
+                "v": 0.749019607843137,
+                "a": 1
             },
-            "oldHue" : 264.935064935065,
-            "source" : "hex"
-        },{
-            "hsl" : {
-                "h" : 73.8842975206612,
-                "s" : 0.626943005181347,
-                "l" : 0.37843137254902,
-                "a" : 1
+            "oldHue": 264.935064935065,
+            "source": "hex"
+        }, {
+            "hsl": {
+                "h": 73.8842975206612,
+                "s": 0.626943005181347,
+                "l": 0.37843137254902,
+                "a": 1
             },
-            "hex" : "#819d24",
-            "rgb" : {
-                "r" : 129,
-                "g" : 157,
-                "b" : 36,
-                "a" : 1
+            "hex": "#819d24",
+            "rgb": {
+                "r": 129,
+                "g": 157,
+                "b": 36,
+                "a": 1
             },
-            "hsv" : {
-                "h" : 73.8842975206612,
-                "s" : 0.770700636942675,
-                "v" : 0.615686274509804,
-                "a" : 1
+            "hsv": {
+                "h": 73.8842975206612,
+                "s": 0.770700636942675,
+                "v": 0.615686274509804,
+                "a": 1
             },
-            "oldHue" : 264.935064935065,
-            "source" : "hex"
+            "oldHue": 264.935064935065,
+            "source": "hex"
         }],
     startSocket: (io) => {
         message
-        .find({})
-        .select("id")
-        .sort({ "id": -1 })
-        .limit(1)
-        .exec(function (err, doc) {
+            .find({})
+            .select("id")
+            .sort({ "id": -1 })
+            .limit(1)
+            .exec(function (err, doc) {
 
-            messageID = doc[0] == undefined ? 0 : doc[0].id;
+                messageID = doc[0] == undefined ? 0 : doc[0].id;
 
-            console.log(messageID);
-            console.log(socket_functions.messageID);
+                console.log(messageID);
+                console.log(socket_functions.messageID);
 
-            console.log("messageid", messageID);
-            io.sockets.on("connection", function (socket) {
+                console.log("messageid", messageID);
+                io.sockets.on("connection", function (socket) {
 
 
-                if (socket.handshake.session.passport) {
-                    socket_functions.user = {
-                        _id: socket.handshake.session.passport.user.user._id,
-                        username: socket.handshake.session.passport.user.user.username,
-                        color: socket.handshake.session.passport.user.user.color
+                    if (socket.handshake.session.passport) {
+                        socket_functions.user = {
+                            _id: socket.handshake.session.passport.user.user._id,
+                            username: socket.handshake.session.passport.user.user.username,
+                            color: socket.handshake.session.passport.user.user.color
+                        }
+                        // console.log(socket.handshake.session.passport.user.user);
+
+                        socket_functions.messageID++;
+                        io.sockets.emit("chat-message", { id: messageID, username: socket_functions.user.username, msg: "User Connected", user: socket_functions.user });
+
+                        socket.on("chat-message", function (message) { socket_functions.messageReceivedHandler(message, socket_functions.user, io) });
                     }
-                    // console.log(socket.handshake.session.passport.user.user);
 
-                    socket_functions.messageID++;
-                    io.sockets.emit("chat-message", { id: messageID, username: socket_functions.user.username, msg: "User Connected", user: socket_functions.user });
+                    return io;
 
-                    socket.on("chat-message", function (message) { socket_functions.messageReceivedHandler(message, socket_functions.user, io) });
-                }
-
-                return io;
-
+                });
             });
-        });
     },
     messageReceivedHandler: (incomingMessage, user, io) => {
         console.log("message received");
@@ -273,7 +272,10 @@ let socket_functions = {
         }).catch(function (err) {
             if (err) throw err;
         });
-    }};
+    }
+};
+
+
 
 module.exports = socket_functions;
     // // let messageID;

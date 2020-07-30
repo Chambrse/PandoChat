@@ -47,8 +47,8 @@ class Home extends Component {
 
     componentDidMount() {
         // initialize the socket connection to the server, and listen for messages.
-        this.socket = io(window.location.host);
-        this.socket.on("chat-message", this.addMessage);
+        // this.socket = io(window.location.host);
+        this.props.socket.on("chat-message", this.addMessage);
 
         // listen for keystrokes.
         document.addEventListener("keydown", this.handleKeydown, false);
@@ -57,83 +57,87 @@ class Home extends Component {
     componentWillUnmount() {
         //when leaving the home page, stop listening for keystrokes and disconnect the socket from the server.
         document.removeEventListener("keydown", this.handleKeydown, false);
-        if (this.socket) {
-            this.socket.off(null);
+        if (this.props.socket) {
+            this.props.socket.off(null);
         }
     }
 
     handleKeydown(event) {
-        let { user } = this.props;
+        if (this.props.loggedIn) {
 
-        // On enter, emit the message.
-        // If you're logged in and you've typed something into the box
-        if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
-            console.log("Attempting to send message.")
-            this.socket.emit("chat-message", { msg: this.state.messageInput, username: user.user.username, user: { username: user.user.username, color: user.user.color }, replyTo: this.state.selectedMessage });
-            this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
-            this.scrollToBottom();
-        }
 
-        //on tab: select most recent message or next most recent message
-        else if (event.keyCode === 9) {
-            event.preventDefault();
-            this.messageInputDiv.focus();
+            let { user, socket } = this.props;
 
-            // console.log("keeyhandler", this.state.selectedMessage);
-
-            if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
-                let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
-                this.setState({
-                    selectedMessageId: this.state.latestMessageId,
-                    selectedMessage: messageToSelect
-                });
-            } else {
-                let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === (this.state.selectedMessageId - 1))[0];
-                this.setState({
-                    selectedMessageId: this.state.selectedMessageId - 1,
-                    selectedMessage: messageToSelect
-                });
-            };
-
-            // console.log("keeyhandler after update", this.state.selectedMessage, this.state.selectedMessageId);
-
-        }
-
-        // escape, reset the selected message
-        else if (event.keyCode === 27) {
-            event.preventDefault();
-            if (this.state.selectedMessageId != null) {
-                this.setState({
-                    selectedMessageId: null,
-                    selectedMessage: null
-                });
+            // On enter, emit the message.
+            // If you're logged in and you've typed something into the box
+            if (event.keyCode === 13 && this.props.loggedIn && this.state.messageInput.trim().length > 0) {
+                console.log("Attempting to send message.")
+                socket.emit("chat-message", { msg: this.state.messageInput, username: user.user.username, user: { username: user.user.username, color: user.user.color }, replyTo: this.state.selectedMessage });
+                this.setState({ messageInput: '', selectedMessageId: null, selectedMessage: null });
+                this.scrollToBottom();
             }
-            this.scrollToBottom();
-        }
 
-        //left
-        else if (event.keyCode === 37) {
-            event.preventDefault();
-            if (this.state.scrolledCartIndex > 0) {
-                this.setState({
-                    left: this.state.left + (this.chatFrame.clientWidth / this.state.numberOfColumns),
-                    transitionString: 'transform 0.5s ease-in-out',
-                    scrolledCartIndex: this.state.scrolledCartIndex - 1
-                })
-            }
-        }
+            //on tab: select most recent message or next most recent message
+            else if (event.keyCode === 9) {
+                event.preventDefault();
+                this.messageInputDiv.focus();
 
-        //right
-        else if (event.keyCode === 39) {
-            event.preventDefault();
-            if (this.state.scrolledCartIndex < this.state.messagesInCarts.length - this.state.numberOfColumns) {
-                this.setState({
-                    left: this.state.left - (this.chatFrame.clientWidth / this.state.numberOfColumns),
-                    transitionString: 'transform 0.5s ease-in-out',
-                    scrolledCartIndex: this.state.scrolledCartIndex + 1
-                })
+                // console.log("keeyhandler", this.state.selectedMessage);
+
+                if (this.state.selectedMessageId === null || this.state.selectedMessageId === this.state.firstMessageId) {
+                    let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === this.state.latestMessageId)[0];
+                    this.setState({
+                        selectedMessageId: this.state.latestMessageId,
+                        selectedMessage: messageToSelect
+                    });
+                } else {
+                    let messageToSelect = this.state.messages.filter(messageObj => messageObj.id === (this.state.selectedMessageId - 1))[0];
+                    this.setState({
+                        selectedMessageId: this.state.selectedMessageId - 1,
+                        selectedMessage: messageToSelect
+                    });
+                };
+
+                // console.log("keeyhandler after update", this.state.selectedMessage, this.state.selectedMessageId);
+
             }
-        }
+
+            // escape, reset the selected message
+            else if (event.keyCode === 27) {
+                event.preventDefault();
+                if (this.state.selectedMessageId != null) {
+                    this.setState({
+                        selectedMessageId: null,
+                        selectedMessage: null
+                    });
+                }
+                this.scrollToBottom();
+            }
+
+            //left
+            else if (event.keyCode === 37) {
+                event.preventDefault();
+                if (this.state.scrolledCartIndex > 0) {
+                    this.setState({
+                        left: this.state.left + (this.chatFrame.clientWidth / this.state.numberOfColumns),
+                        transitionString: 'transform 0.5s ease-in-out',
+                        scrolledCartIndex: this.state.scrolledCartIndex - 1
+                    })
+                }
+            }
+
+            //right
+            else if (event.keyCode === 39) {
+                event.preventDefault();
+                if (this.state.scrolledCartIndex < this.state.messagesInCarts.length - this.state.numberOfColumns) {
+                    this.setState({
+                        left: this.state.left - (this.chatFrame.clientWidth / this.state.numberOfColumns),
+                        transitionString: 'transform 0.5s ease-in-out',
+                        scrolledCartIndex: this.state.scrolledCartIndex + 1
+                    })
+                }
+            }
+        };
     }
 
     scrollToBottom() {
@@ -310,7 +314,7 @@ class Home extends Component {
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
                                 <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 3 : 10}} />
+                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 3 : 10 }} />
                                     {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
