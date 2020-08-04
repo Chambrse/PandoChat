@@ -39,7 +39,7 @@ body {
 
 #whiteWindow {
   border-radius: 15px;
-  background-color: #9E7941;
+  background-color: #EAE2D6;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
   margin: 25px;
 }
@@ -90,7 +90,7 @@ transition: opacity 1000ms linear;
   margin-right: 5px;
 }
 
-#dropdownMenuButton {
+.btn {
   background-color: #9E7941;
 }
 

@@ -36,6 +36,7 @@ class App extends Component {
         console.log('not logged in');
       } else {
         this.setState({ loggedIn: true, user: response.data.data });
+        this.socket.emit('socket-login');
       }
       this.setState({ loading: 'done' });
     });
@@ -81,7 +82,7 @@ class App extends Component {
                     timeout={1000}
                   >
                     <Switch location={location} >
-                      <Route exact path="/login"
+                      {/* <Route exact path="/login"
                         render={() => (
                           <div className='container' style={{ position: 'relative' }}>
                             <Login
@@ -89,7 +90,7 @@ class App extends Component {
                               loggedIn={this.state.loggedIn}
                               updateAppState={this.updateAppState} />
                           </div>
-                        )} />
+                        )} /> */}
                       <Route exact path="/register"
                         render={() => (
                           <div className='container' style={{ position: 'relative' }}>

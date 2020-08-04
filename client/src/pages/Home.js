@@ -289,7 +289,7 @@ class Home extends Component {
                         <input ref={(div) => this.messageInputDiv = div} type='text' placeholder={this.state.selectedMessageId ? "Reply to " + this.state.selectedMessage.username : 'Send a message'} autoComplete="off" className='form-control' name='messageInput' value={this.state.messageInput} onChange={this.handleChange} ></input>
                     ) :
                         (
-                            <p><Link to='/login'>Login</Link> or <Link to='/register'>register</Link> to join the conversation.</p>
+                            <p><Link to='/register'>Register</Link> to join the conversation.</p>
                         )}
                 </div>
                 <div className='p-1 row' id='holder'>
