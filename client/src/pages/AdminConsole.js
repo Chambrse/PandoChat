@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import '../css/register.css';
-import logo from '../images/PandoChat_200x200.png';
 import axios from 'axios';
 import { withRouter } from "react-router";
-import { SketchPicker } from 'react-color';
-import Message from '../components/Message';
-import profileImage from '../images/profileImage.jpg'
-import { Form } from 'react-bootstrap';
 
 
 

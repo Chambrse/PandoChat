@@ -1,14 +1,9 @@
 import logo from '../images/PandoFlat_200x200.png';
 import React from 'react';
-import fbshare from '../images/Facebook-share-icon.png';
-import twittershare from '../images/twitter-512.png';
 import jsonpackage from '../../package.json';
 import { Link } from 'react-router-dom';
 import { withRouter } from "react-router";
-import { Dropdown, DropdownButton } from 'react-bootstrap';
 import axios from 'axios';
-import ErrorBoundary from './ErrorBoundary';
-import { Modal } from 'react-bootstrap';
 
 
 class Navbar extends React.Component {
@@ -41,8 +36,8 @@ class Navbar extends React.Component {
                     this.props.socket.disconnect();
                     this.props.socket.connect();
                     this.props.socket.emit("socket-login");
-                    console.log(this.props.history);
-                    if (this.props.history[-1] != '/home') {
+                    // console.log(this.props.history);
+                    if (this.props.history.location.pathname !== '/home') {
                         this.props.history.push("/home");
                     }
                 }
@@ -85,7 +80,7 @@ class Navbar extends React.Component {
                 <div style={{ position: 'absolute', top: '0px', fontSize: '12px' }}>
                     alpha {jsonpackage.version}
                 </div>
-                <a className="navbar-brand" style={{ color: '#F3C800' }} href="/home"><img style={{ height: '64px' }} src={logo} /></a>
+                <a className="navbar-brand" style={{ color: '#F3C800' }} href="/home"><img style={{ height: '64px' }} alt="pandochat logo" src={logo} /></a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -107,7 +102,7 @@ class Navbar extends React.Component {
                                 <span className="sr-only">(current)</span>
                             </div>
                         </li>
-                        {this.props.loggedIn && this.props.user.user.type == "ADMIN" ? (
+                        {this.props.loggedIn && this.props.user.user.type === "ADMIN" ? (
                             <li className={"nav-item " + (this.props.history.location.pathname === '/admin' ? 'active' : 'noActive')}>
                                 <div className="nav-link" linkto='/admin' onClick={this.navHandler}>Admin
                                                         <span className="sr-only">(current)</span>
@@ -119,7 +114,7 @@ class Navbar extends React.Component {
                     </ul>
                     {!this.props.loggedIn || this.props.user === null ? (
                         <div className='d-flex'>
-                            <form class="form-inline" onSubmit={this.handleSubmit}>
+                            <form className="form-inline" onSubmit={this.handleSubmit}>
                                 <div className='form-group loginInput'>
                                     <input type="text" name='email' placeholder='Email' className={`form-control ${this.state.emailErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.email} onChange={this.handleChange} />
                                     {this.state.emailErrors.length > 0 ? (
@@ -167,12 +162,12 @@ class Navbar extends React.Component {
                     }
                     <span className="navbar-text white-text p-1">
                         <a href='https://www.facebook.com/sharer/sharer.php?u=https%3A//www.pando.chat'>
-                            <i class="fa fa-facebook-square fa-lg"></i>
+                            <i className="fa fa-facebook-square fa-lg"></i>
                         </a>
                     </span>
                     <span className="navbar-text white-text p-1">
                         <a href='https://twitter.com/intent/tweet?url=https%3A%2F%2Fwww.pando.chat&text=PandoChat%20-%20Join%20the%20conversation!'>
-                        <i class="fa fa-twitter-square fa-lg"></i>
+                        <i className="fa fa-twitter-square fa-lg"></i>
                         </a>
                     </span>
                 </div>

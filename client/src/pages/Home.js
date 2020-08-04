@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import logo from '../images/PandoChat_200x200.png';
 import logoIcon from '../images/PandoChat_IconOnly.png'
 import cartIcon from '../images/leaf-plants-nature-icon-23.png';
 import '../css/chat.css';
-import io from 'socket.io-client';
 import Message from '../components/Message';
-import axios from "axios";
 import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 
@@ -278,7 +275,7 @@ class Home extends Component {
 
     render() {
         return (
-            <div id='chatWindow' class='container-fluid'>
+            <div id='chatWindow' className='container-fluid'>
                 <div className='row p-1'>
                     <div className='col mt-2'>
                         <img alt='PandoChat Logo' src={logoIcon} id="PandoLogo"></img>
@@ -314,7 +311,7 @@ class Home extends Component {
                         {this.state.messagesInCarts.length > 0 ? (
                             this.state.messagesInCarts.slice(this.state.messagesInCarts.length - this.state.numberOfCartsToShow >= 0 ? this.state.messagesInCarts.length - this.state.numberOfCartsToShow : 0, this.state.messagesInCarts.length).map((n, index) => (
                                 <div key={n.index} cartid={n.index} ref={(div) => { this['chatCart_' + n.index] = div }} style={{ position: 'absolute', width: `${((1 / this.state.numberOfColumns) * 100)}%`, left: `${((1 / this.state.numberOfColumns) * 100) * n.index}%` }} className='chatCart'>
-                                    <img id="cartIcon" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 3 : 10 }} />
+                                    <img id="cartIcon" alt="leaf" src={cartIcon} style={{ width: '100px', top: this.chatFrame ? this.chatFrame.clientHeight / 3 : 10 }} />
                                     {n.messages.map((m, index2) => (
                                         <Message onClick={this.messageClick}
                                             classNames={m.id === this.state.selectedMessageId ? 'selectedMessage' : 'test'}
