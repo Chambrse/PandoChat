@@ -120,6 +120,7 @@ class App extends Component {
                               loggedIn={this.state.loggedIn}
                               updateAppState={this.updateAppState}
                               user={this.state.user}
+                              socket={this.socket}
                             />
                           </div>)} />
                       <Route path="/about"

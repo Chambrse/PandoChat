@@ -93,6 +93,9 @@ class ChooseProperties extends Component {
             this.props.updateAppState({
                 user: {user: response.data.user}
             }, () => {
+                this.props.socket.disconnect();
+                this.props.socket.connect();
+                this.props.socket.emit("socket-login");
                 this.props.history.push("/home");
             });
         })
