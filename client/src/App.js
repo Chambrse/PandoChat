@@ -36,6 +36,7 @@ class App extends Component {
         console.log('not logged in');
       } else {
         this.setState({ loggedIn: true, user: response.data.data });
+        this.socket.emit('socket-login');
       }
       this.setState({ loading: 'done' });
     });

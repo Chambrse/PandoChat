@@ -90,7 +90,7 @@ transition: opacity 1000ms linear;
   margin-right: 5px;
 }
 
-#dropdownMenuButton {
+.btn {
   background-color: #9E7941;
 }
 
