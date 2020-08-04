@@ -45,13 +45,13 @@ class About extends Component {
                                     PandoChat is built on the MERN stack, using MongoDB, express, React, and node, all hosted on Heroku.
                             </p>
                             </div>
-                            <div className='col'>
+                            {/* <div className='col'>
                                 <div className='row justify-content-center'>
                                     <img src={profileImage} />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
-                        <div className='row m-4 justify-content-center'>
+                        {/* <div className='row m-4 justify-content-center'>
                             Like what you see? Help make this site better by donating!
                         </div>
                         <div className='row m-4 justify-content-center'>
@@ -63,7 +63,7 @@ class About extends Component {
                                 <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
                             </form>
 
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <ins className="adsbygoogle"

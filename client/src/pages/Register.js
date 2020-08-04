@@ -96,7 +96,7 @@ class Register extends Component {
                         <div className='row'>
                             <div className='col-md-6 col-sm-12 text-center align-middle p-2'>
                                 Welcome to Chatter! The chat room for everyone. To join in the conversation, please sign up.
-                                <p>Already have an account? <Link to='/login'>Log In</Link></p>
+                                <p>Already have an account? Login above!</p>
                             </div>
                             <div className='col-md-6 col-sm-12'>
                                 <h2>Register:</h2>

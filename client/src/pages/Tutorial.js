@@ -38,15 +38,18 @@ class Tutorial extends Component {
                         </div>
                         <div className='rows'>
 
-                            <h3>The Basics</h3>
+                            <h3>The Basics - Controls</h3>
+
+                            <p>Pando Chat has an unusual interface, so in order to make the most of what it has to offer, heed these instructions!</p>
 
                             <h4>TAB</h4>
-                            <p>Cycle through recently received messages.</p>
+                            <p>Cycle through recently received messages. The input is automatically focussed, so once the message you'd like to reply to is highlighted, you can immediately start typing a response.</p>
                             <h4>Left and Right Arrow keys</h4>
-                            <p>Scroll the chat window to the left and right. This only applies if there are enough messages to fill the screen at least once.</p>
+                            <p>Scroll the chat window to the left and right to view older messages.</p>
                             <h4>Escape</h4>
-                            <p>Deselect messages, and scroll to the end of the chat feed.</p>
-                            <p>You can also click on messages to reply to them. Replies will be color coded to more easily follow a conversation. You cannot reply to yourself.</p>
+                            <p>Deselect messages, and scroll to the end of the chat feed if applicable.</p>
+                            <h4>Misc</h4>
+                            <p>You can also click on messages to reply to them. Replies will be color coded to more easily follow a conversation.</p>
                             {/* <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
                                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>

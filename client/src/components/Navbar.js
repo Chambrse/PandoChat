@@ -38,11 +38,13 @@ class Navbar extends React.Component {
     
                 if (response.data.loggedIn) {
                     this.props.updateAppState(response.data);
-                    // this.props.history.push("/home");
                     this.props.socket.disconnect();
                     this.props.socket.connect();
                     this.props.socket.emit("socket-login");
-                    
+                    console.log(this.props.history);
+                    if (this.props.history[-1] != '/home') {
+                        this.props.history.push("/home");
+                    }
                 }
     
             }).catch(err => {
@@ -116,7 +118,7 @@ class Navbar extends React.Component {
                         </li> */}
                     </ul>
                     {!this.props.loggedIn || this.props.user === null ? (
-                        <div>
+                        <div className='d-flex'>
                             <form class="form-inline" onSubmit={this.handleSubmit}>
                                 <div className='form-group loginInput'>
                                     <input type="text" name='email' placeholder='Email' className={`form-control ${this.state.emailErrors.length > 0 ? 'is-invalid' : 'is-valid'}`} value={this.state.email} onChange={this.handleChange} />
@@ -148,6 +150,8 @@ class Navbar extends React.Component {
                                     ) : null}
                                 </div>
                             </form>
+                            <Link to='/register'><button className='btn btn-secondary'>Register</button></Link>
+                            
                             
                         </div>
                     ) :
@@ -156,7 +160,7 @@ class Navbar extends React.Component {
                                 {this.props.user && this.props.user.user ? this.props.user.user.username : null}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item" href="#">Edit Profile</a>
+                                {/* <a className="dropdown-item" href="#">Edit Profile</a> */}
                                 <a className="dropdown-item" onClick={this.logOut}>Logout</a>
                             </div>
                         </div>
