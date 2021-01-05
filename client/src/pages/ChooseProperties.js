@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import '../css/register.css';
-import logo from '../images/Chatter_Logo_Transparent.png';
+import logo from '../images/PandoChat_200x200.png';
 import axios from 'axios';
 import { withRouter } from "react-router";
 import { SketchPicker } from 'react-color';
