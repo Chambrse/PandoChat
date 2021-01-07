@@ -49,9 +49,9 @@ class About extends Component {
 
                             <p>Around the net, you've probably seen a chat interface and the general idea has remained the same for decades. Step 1: there is a message input box. Step 2: Each message is added to the bottom of the feed, and older messages are pushed up to make room. Step 3: Profit?</p>
 
-                            <p>While this might work quite well for most implementations and, admittedly, most modern chat implementations have more to offer than the caricature I've describes, there is one situation in which they all fall short: high volume</p>
+                            <p>While this might work quite well for most implementations and, admittedly, most modern chat implementations have more to offer than the caricature I've described, there is one situation in which they all fall short: high volume</p>
 
-                            <p> If you're receiving more than a couple of messages a second - like on a live stream with a large audience, for example - the feed becomes hard to read. If you try to click on a message to reply, you might end up clicking the one below it because it's been pushed up. If you can manage to reply to a message, it will get lost in the barrage of emojis and no real conversation can be had. Enter: PandoChat.</p>
+                            <p> If you're receiving more than a couple of messages per second - like on a live stream with a large audience, for example - the feed becomes hard to read. If you try to click on a message to reply, you might end up clicking the one below it because it's been pushed up. If you can manage to reply to a message, it will get lost in the barrage of emojis and no real conversation can be had. Enter: PandoChat.</p>
                             
                             <h5>The Solution</h5>
 
@@ -65,7 +65,7 @@ class About extends Component {
 
                             <h5>The Goal</h5>
 
-                            <p>This is mostly just an experiment and a way to keep my coding muscles conditioned, but if there is enough interest in unique chat interfaces, I will definitely invest more time into this. It's fun! Eventually, I imagine collecting the best tools from this experiment, and incorporating them into a chat SaaS that can be implemented on other websites!</p>
+                            <p>This is mostly just an experiment and a way to keep my coding muscles conditioned, but if there is enough interest in unique chat interfaces, I will definitely invest more time into this. </p>
 
                             </div>
                             {/* <div className='col'>

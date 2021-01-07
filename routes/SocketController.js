@@ -126,7 +126,7 @@ let SocketController = function (io) {
             .limit(1)
             .exec((err, doc) => {
 
-                this.messageID = doc[0] == undefined ? 0 : doc[0].id;
+                this.messageID = doc == undefined ? 0 : doc[0].id;
 
                 this.io.sockets.on("connection", (socket) => {
 
