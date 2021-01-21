@@ -60,7 +60,7 @@
     "react-color": "^2.17.3",
     "sequelize": "^4.38.0",
     "serve-favicon": "^2.5.0",
-    "socket.io": "^1.7.3",
+    "socket.io": "^2.4.0",
     "validator": "^10.8.0",
     "velocity-react": "^1.4.1",
     "yarn": "^1.22.0"
