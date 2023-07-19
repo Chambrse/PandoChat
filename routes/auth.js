@@ -94,12 +94,12 @@ router.post("/register", function (req, res) {
 
                 res.send({ loggedIn: true, user: {user: data}});
 
-                req.app.Mailer.sendMail({
-                    from: "pandoChat",
-                    to: 'shaneechambry@gmail.com',  //Change to email address that you want to receive messages on
-                    subject: 'Someone Created an Account on pandoChat!',
-                    text: 'email: ' + req.body.email
-                  });
+                // req.app.Mailer.sendMail({
+                //     from: "pandoChat",
+                //     to: 'shaneechambry@gmail.com',  //Change to email address that you want to receive messages on
+                //     subject: 'Someone Created an Account on pandoChat!',
+                //     text: 'email: ' + req.body.email
+                //   });
 
             });
 
