@@ -16,8 +16,8 @@ const bcrypt = require('bcryptjs');
 const sharedsession = require("express-socket.io-session");
 const SocketController = require('./routes/SocketController');
 
-let Mailer = require('./controllers/Mailer')();
-Mailer.verify();
+// let Mailer = require('./controllers/Mailer')();
+// Mailer.verify();
 
 const PORT = process.env.PORT || 3001;
 
@@ -109,4 +109,4 @@ socket.start();
 // require("./routes/socket_functions").startSocket(socket.io);
 
 app.chatsim = require('./controllers/chatsim')(socket);
-app.Mailer = Mailer;
+// app.Mailer = Mailer;

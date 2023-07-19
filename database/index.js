@@ -4,7 +4,9 @@ mongoose.Promise = global.Promise;
 
 // your local database url
 // 27017 is the default mongoDB port
-const uri = process.env.MONGODB_URI || 'mongodb+srv://api_user:noTh6iSFPWObsNMu@cluster0.fdqsq.mongodb.net/Pandochat?retryWrites=true&w=majority';
+const uri = process.env.MONGODB_URI || 'mongodb+srv://admin:TzuMExlmksWQgdg7@cluster0.pxi75yz.mongodb.net/?retryWrites=true&w=majority';
+// const uri = process.env.MONGODB_URI || 'mongodb+srv://apiUser:SXzAbUa2gZ1BgOYw@cluster0.pxi75yz.mongodb.net/?retryWrites=true&w=majority';
+// const uri = "mongodb://localhost:27017/pandochatLocal"
 
 mongoose.connect(uri).then(
     () => {
